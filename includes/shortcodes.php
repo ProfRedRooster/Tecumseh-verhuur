@@ -58,36 +58,44 @@ function scouting_rentals_form_shortcode() {
     </form>
 
     <script>
-        function calculatePrice() {
-            var fieldToiletsPrice = <?php echo $field_toilets_price; ?>;
-            var fieldToiletsKitchenPrice = <?php echo $field_toilets_kitchen_price; ?>;
-            var fieldToiletsKitchenLokalenPrice = <?php echo $field_toilets_kitchen_lokalen_price; ?>;
-            var woodPrice = <?php echo $wood_price; ?>;
-            var scoutingDiscount = <?php echo $scouting_discount; ?>;
+function calculatePrice() {
+    var fieldToiletsPrice = <?php echo $field_toilets_price; ?>;
+    var fieldToiletsKitchenPrice = <?php echo $field_toilets_kitchen_price; ?>;
+    var fieldToiletsKitchenLokalenPrice = <?php echo $field_toilets_kitchen_lokalen_price; ?>;
+    var woodPrice = <?php echo $wood_price; ?>;
+    var scoutingDiscount = <?php echo $scouting_discount; ?>;
 
-            var service = document.getElementById('service').value;
-            var woodIncluded = document.getElementById('wood').checked;
-            var relatedScouting = document.getElementById('related_scouting').checked;
+    var startDate = new Date(document.getElementById('start_date').value);
+    var endDate = new Date(document.getElementById('end_date').value);
+    var timeDiff = endDate.getTime() - startDate.getTime();
+    var days = timeDiff / (1000 * 3600 * 24) + 1; // +1 to include both start and end dates
 
-            var price = 0;
-            if (service == 'field_toilets') {
-                price = fieldToiletsPrice;
-            } else if (service == 'field_toilets_kitchen') {
-                price = fieldToiletsKitchenPrice;
-            } else if (service == 'field_toilets_kitchen_lokalen') {
-                price = fieldToiletsKitchenLokalenPrice;
-            }
+    var service = document.getElementById('service').value;
+    var woodIncluded = document.getElementById('wood').checked;
+    var relatedScouting = document.getElementById('related_scouting').checked;
 
-            if (woodIncluded) {
-                price += woodPrice;
-            }
+    var price = 0;
+    if (service == 'field_toilets') {
+        price = fieldToiletsPrice;
+    } else if (service == 'field_toilets_kitchen') {
+        price = fieldToiletsKitchenPrice;
+    } else if (service == 'field_toilets_kitchen_lokalen') {
+        price = fieldToiletsKitchenLokalenPrice;
+    }
 
-            if (relatedScouting) {
-                price -= (price * scoutingDiscount / 100);
-            }
+    price *= days; // Multiply the price by the number of days
 
-            document.getElementById('total_price').innerText = price.toFixed(2);
-        }
+    if (woodIncluded) {
+        price += woodPrice * days; // Wood price also multiplied by the number of days
+    }
+
+    if (relatedScouting) {
+        price -= (price * scoutingDiscount / 100);
+    }
+
+    document.getElementById('total_price').innerText = price.toFixed(2);
+}
+
 
         window.onload = calculatePrice;
     </script>
