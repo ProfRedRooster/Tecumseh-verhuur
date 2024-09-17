@@ -6,7 +6,7 @@ Working features:
 - The admin panel
 - The settings panel
 - Upcoming Reservations tm
-- The morning/afternoon function in the whole system :)
+- The morning/afternoon function in the database + form  :)
 
 Features that are not working yet:
 - Stop dates that are already reserved
