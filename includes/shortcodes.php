@@ -18,19 +18,19 @@ function scouting_rentals_form_shortcode() {
 
         <!-- Date and Time -->
         <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date" name="start_date" required><br>
+        <input type="date" id="start_date" name="start_date" required onchange="calculatePrice()"><br>
 
         <label for="end_date">End Date:</label>
-        <input type="date" id="end_date" name="end_date" required><br>
+        <input type="date" id="end_date" name="end_date" required onchange="calculatePrice()"><br>
 
         <label for="start_period">Start Period:</label>
-        <select id="start_period" name="start_period">
+        <select id="start_period" name="start_period" onchange="calculatePrice()">
             <option value="morning">Morning</option>
             <option value="evening">Evening</option>
         </select><br>
 
         <label for="end_period">End Period:</label>
-        <select id="end_period" name="end_period">
+        <select id="end_period" name="end_period" onchange="calculatePrice()">
             <option value="morning">Morning</option>
             <option value="evening">Evening</option>
         </select><br>
@@ -42,6 +42,13 @@ function scouting_rentals_form_shortcode() {
             <option value="field_toilets_kitchen">Veld + Toiletten + Keuken</option>
             <option value="field_toilets_kitchen_lokalen">Veld + Toiletten + Keuken + Speltaklokalen</option>
         </select><br>
+
+        <select id="number_of_people" onchange="calculatePrice()">
+    <option value="<25">Less than 25</option>
+    <option value="25-50">25-50</option>
+    <option value="50-100">50-100</option>
+    <option value="100+">More than 100</option>
+        </select>
 
         <!-- Wood Option -->
         <label for="wood">Include Wood:</label>
@@ -67,12 +74,26 @@ function calculatePrice() {
 
     var startDate = new Date(document.getElementById('start_date').value);
     var endDate = new Date(document.getElementById('end_date').value);
+    var startPeriod = document.getElementById('start_period').value;
+    var endPeriod = document.getElementById('end_period').value;
+
     var timeDiff = endDate.getTime() - startDate.getTime();
-    var days = timeDiff / (1000 * 3600 * 24) + 1; // +1 to include both start and end dates
+    var days = timeDiff / (1000 * 3600 * 24);
+
+    if (startPeriod === 'evening' && endPeriod === 'evening') {
+        days += 0.5;
+    }
+    if (startPeriod === 'morning' && endPeriod === 'morning') {
+        days += 0.5;
+    }
+    else {
+        days += 1;
+    }
 
     var service = document.getElementById('service').value;
     var woodIncluded = document.getElementById('wood').checked;
     var relatedScouting = document.getElementById('related_scouting').checked;
+    var numberOfPeople = document.getElementById('number_of_people').value; // Get the selected number of people
 
     var price = 0;
     if (service == 'field_toilets') {
@@ -83,14 +104,30 @@ function calculatePrice() {
         price = fieldToiletsKitchenLokalenPrice;
     }
 
-    price *= days; // Multiply the price by the number of days
+    price *= days;
 
     if (woodIncluded) {
-        price += woodPrice * days; // Wood price also multiplied by the number of days
+        price += woodPrice * days;
     }
 
     if (relatedScouting) {
         price -= (price * scoutingDiscount / 100);
+    }
+
+    // Adjust price based on the number of people
+    switch (numberOfPeople) {
+        case '<25':
+            price *= 0.3;
+            break;
+        case '25-50':
+            price *= 0.4; // Example adjustment
+            break;
+        case '50-100':
+            price *= 0.7; // Example adjustment
+            break;
+        case '100+':
+            price *= 1.0; // Example adjustment
+            break;
     }
 
     document.getElementById('total_price').innerText = price.toFixed(2);

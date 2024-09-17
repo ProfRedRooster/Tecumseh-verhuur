@@ -1,6 +1,6 @@
 <?php
 function calculate_total_price($number_of_people, $service, $wood_included, $related_scouting) {
- // Price structure based on provided sheet
+    // Price structure based on provided sheet
     $field_toilets_price = get_option('field_toilets_price', 60);
     $field_toilets_kitchen_price = get_option('field_toilets_kitchen_price', 75);
     $field_toilets_kitchen_lokalen_price = get_option('field_toilets_kitchen_lokalen_price', 100);
