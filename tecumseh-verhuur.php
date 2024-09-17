@@ -35,7 +35,8 @@ function scouting_rentals_install() {
         end_date date NOT NULL,
         start_period enum('morning', 'evening') NOT NULL,
         end_period enum('morning', 'evening') NOT NULL,
-        number_of_people varchar(255) NOT NULL,
+        number_of_people enum('<25', '25-50', '50-100', '100+') NOT NULL,
+        service enum('field_toilets', 'field_toilets_kitchen', 'field_toilets_kitchen_lokalen') NOT NULL,
         total_price float NOT NULL,
         status enum('pending', 'approved', 'rejected') DEFAULT 'pending',
         PRIMARY KEY (id)

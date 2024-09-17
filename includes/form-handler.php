@@ -95,6 +95,7 @@ function handle_scouting_rentals_submission() {
                 'start_period' => $start_period,
                 'end_period' => $end_period,
                 'number_of_people' => $number_of_people,
+                'service' => $service, // Add this line
                 'total_price' => $total_price,
                 'status' => 'pending'
             ),
@@ -105,7 +106,8 @@ function handle_scouting_rentals_submission() {
                 '%s', // end_date
                 '%s', // start_period
                 '%s', // end_period
-                '%d', // number_of_people
+                '%s', // number_of_people
+                '%s', // service - Add this line for the format of the service column, assuming it's a string
                 '%f', // total_price
                 '%s'  // status
             )

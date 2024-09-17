@@ -43,7 +43,7 @@ function scouting_rentals_form_shortcode() {
             <option value="field_toilets_kitchen_lokalen">Veld + Toiletten + Keuken + Speltaklokalen</option>
         </select><br>
 
-        <select id="number_of_people" onchange="calculatePrice()">
+        <select id="number_of_people" name="number_of_people" required onchange="calculatePrice()">
     <option value="<25">Less than 25</option>
     <option value="25-50">25-50</option>
     <option value="50-100">50-100</option>
