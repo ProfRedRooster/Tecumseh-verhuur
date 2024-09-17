@@ -17,7 +17,7 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     } elseif ($start_period === 'morning' && $end_period === 'morning') {
         $days += 0.5;
     } else {
-        $days += 1;
+        $days += 0;
     }
 
     // Determine base price based on service
@@ -96,6 +96,7 @@ function handle_scouting_rentals_submission() {
                 'end_period' => $end_period,
                 'number_of_people' => $number_of_people,
                 'service' => $service, // Add this line
+                'wood_included' => $wood_included, // Add this line
                 'total_price' => $total_price,
                 'status' => 'pending'
             ),
@@ -108,6 +109,7 @@ function handle_scouting_rentals_submission() {
                 '%s', // end_period
                 '%s', // number_of_people
                 '%s', // service - Add this line for the format of the service column, assuming it's a string
+                '%s', // wood_included - Add this line for the format of the service column, assuming it's a string
                 '%f', // total_price
                 '%s'  // status
             )

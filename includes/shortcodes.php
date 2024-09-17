@@ -51,8 +51,8 @@ function scouting_rentals_form_shortcode() {
         </select>
 
         <!-- Wood Option -->
-        <label for="wood">Include Wood:</label>
-        <input type="checkbox" id="wood" name="wood" value="yes" onchange="calculatePrice()"><br>
+        <label for="wood_included">Include Wood:</label>
+        <input type="checkbox" id="wood_included" name="wood_included" value="yes" onchange="calculatePrice()"><br>
 
         <!-- Scouting Related Checkbox -->
         <label for="related_scouting">Are you related to Scouting?</label>
@@ -87,11 +87,11 @@ function calculatePrice() {
         days += 0.5;
     }
     else {
-        days += 1;
+        days += 0;
     }
 
     var service = document.getElementById('service').value;
-    var woodIncluded = document.getElementById('wood').checked;
+    var woodIncluded = document.getElementById('wood_included').checked;
     var relatedScouting = document.getElementById('related_scouting').checked;
     var numberOfPeople = document.getElementById('number_of_people').value; // Get the selected number of people
 
