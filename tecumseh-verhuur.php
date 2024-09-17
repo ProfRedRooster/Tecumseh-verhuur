@@ -1,14 +1,14 @@
 <?php
 /*
  * @link              https://url
- * @since             0.0.2
+ * @since             0.0.1
  * @package           Tecumseh_Verhuur
  *
  * @wordpress-plugin
  * Plugin Name:       Tecumseh Verhuur
- * Plugin URI:        https://plugins.rohandg.nl
- * Description:       Administratie verhuuren  verhuur formulieren
- * Version:           0.0.1
+ * Plugin URI:        https://github.com/ProfRedRooster/Tecumseh-verhuur/
+ * Description:       Administratie verhuur en verhuur formulieren
+ * Version:           0.0.2
  * Author:            Rohan de Graaf
  * Author URI:        https://rohandg.nl/
  * Text Domain:       tecumseh_beheer
