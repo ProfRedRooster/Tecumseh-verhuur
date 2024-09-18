@@ -10,11 +10,11 @@ Working features:
 - the scout discount
 - the wood addons
 - the database create tool at activating
+- you can see the availability 
+- the availability has more info in the "intranet" side of the site
 
 Features that are not working yet:
-- Stop dates that are already reserved
-- Improve the date picker so you can see the availability in selecting the dates.
-- make an message box
+- Improve the date picker so you can see the availability in selecting the date picker.
 - Make so it wil send a email 
 - translate the code and the functions to dutch
 

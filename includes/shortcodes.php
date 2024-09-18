@@ -147,47 +147,59 @@ function calculatePrice() {
 add_shortcode('scouting_rentals_form', 'scouting_rentals_form_shortcode');
 // Shortcode for displaying upcoming reservations
 
-function scouting_upcoming_reservations() {
+function scouting_upcoming_reservations_public() {
     global $wpdb;
     $table_name = $wpdb->prefix . "scouting_rentals";
-
-    // Prepare the SQL query
-    $query = $wpdb->prepare(
-        "SELECT * FROM $table_name WHERE status = %s ORDER BY start_date ASC",
-        'approved'
-    );
+    $query = $wpdb->prepare("SELECT * FROM $table_name WHERE status = %s ORDER BY start_date ASC", 'approved');
     $results = $wpdb->get_results($query);
-
-    // Check for SQL errors
     if ($wpdb->last_error) {
         error_log('Database error: ' . $wpdb->last_error);
         return '<p>There was an error retrieving the reservations.</p>';
     }
-
-    // Debug output
     if (empty($results)) {
         error_log('No results found for the query: ' . $query);
-        return '<p>No upcoming reservations found.</p>';
+        return '<p>Geen (goedgekeurde) reservaties gevonden</p>';
     }
-
-    // Log the structure of $results
-    error_log(print_r($results, true));
-
     ob_start();
-    echo '<h2>Upcoming Reservations</h2>';
-    echo '<ul>';
+    echo '<h2>Gereseveerde datums:</h2><ul>';
     foreach ($results as $row) {
-        // Check if the property exists
+        $start_date = esc_html($row->start_date);
+        $end_date = esc_html($row->end_date);
+        $start_period = esc_html($row->start_period); // Added start_period
+        $end_period = esc_html($row->end_period); // Added end_period
+        echo "<li>$start_date $start_period to $end_date $end_period</li>";
+    }
+    echo '</ul>';
+    return ob_get_clean();
+}
+add_shortcode('scouting_upcoming_reservations_public', 'scouting_upcoming_reservations_public');
+
+function scouting_upcoming_reservations() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . "scouting_rentals";
+    $query = $wpdb->prepare("SELECT * FROM $table_name WHERE status = %s ORDER BY start_date ASC", 'approved');
+    $results = $wpdb->get_results($query);
+    if ($wpdb->last_error) {
+        error_log('Database error: ' . $wpdb->last_error);
+        return '<p>There was an error retrieving the reservations.</p>';
+    }
+    if (empty($results)) {
+        error_log('No results found for the query: ' . $query);
+        return '<p>Geen (goedgekeurde) reservaties gevonden</p>';
+    }
+    ob_start();
+    echo '<h2>Gereseveerde datums:</h2><ul>';
+    foreach ($results as $row) {
         $name = esc_html($row->name);
         $start_date = esc_html($row->start_date);
         $end_date = esc_html($row->end_date);
         $service = isset($row->service) ? esc_html($row->service) : 'N/A';
-
-        echo "<li>$name - $start_date to $end_date ($service)</li>";
+        $start_period = isset($row->start_period) ? esc_html($row->start_period) : 'N/A'; // Added start_period
+        $end_period = isset($row->end_period) ? esc_html($row->end_period) : 'N/A'; // Added end_period
+        echo "<li>$name - $start_date $start_period to $end_date $end_period ($service)</li>";
     }
     echo '</ul>';
     return ob_get_clean();
 }
 add_shortcode('scouting_upcoming_reservations', 'scouting_upcoming_reservations');
-
 ?>
