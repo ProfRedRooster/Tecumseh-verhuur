@@ -1,0 +1,33 @@
+.scouting-rentals-admin {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.scouting-rentals-admin table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scouting-rentals-admin th, .scouting-rentals-admin td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.scouting-rentals-admin tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.scouting-rentals-admin th {
+    background-color: #0073aa;
+    color: white;
+}
+
+.scouting-rentals-admin a {
+    color: #0073aa;
+    text-decoration: none;
+}
+
+.scouting-rentals-admin a:hover {
+    text-decoration: underline;
+}

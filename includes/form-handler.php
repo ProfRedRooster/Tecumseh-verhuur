@@ -82,6 +82,7 @@ function handle_scouting_rentals_submission() {
         $end_date = isset($_POST['end_date']) ? sanitize_text_field($_POST['end_date']) : '';
         $start_period = isset($_POST['start_period']) ? sanitize_text_field($_POST['start_period']) : '';
         $end_period = isset($_POST['end_period']) ? sanitize_text_field($_POST['end_period']) : '';
+        $message = isset($_POST['message']) ? sanitize_textarea_field($_POST['message']) : '';
 
         // Calculate the total price
         $total_price = calculate_total_price($number_of_people, $service, $wood_included, $related_scouting, $start_date, $end_date, $start_period, $end_period);
@@ -100,6 +101,7 @@ function handle_scouting_rentals_submission() {
                 'service' => $service, // Add this line
                 'wood_included' => $wood_included, // Add this line
                 'total_price' => $total_price,
+                'message' => $message,
                 'status' => 'pending'
             ),
             array(
@@ -113,6 +115,7 @@ function handle_scouting_rentals_submission() {
                 '%s', // service - Add this line for the format of the service column, assuming it's a string
                 '%s', // wood_included - Add this line for the format of the service column, assuming it's a string
                 '%f', // total_price
+                '%s', // message
                 '%s'  // status
             )
         );

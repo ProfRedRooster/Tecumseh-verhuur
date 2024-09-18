@@ -26,7 +26,7 @@ function scouting_rentals_install() {
     global $wpdb;
     $table_name = $wpdb->prefix . "scouting_rentals";
     $charset_collate = $wpdb->get_charset_collate();
-
+    $message_column = ", message text NOT NULL";
     $sql = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         name varchar(255) NOT NULL,
@@ -39,8 +39,9 @@ function scouting_rentals_install() {
         service enum('field_toilets', 'field_toilets_kitchen', 'field_toilets_kitchen_lokalen') NOT NULL,
         wood_included enum('yes', 'no') NOT NULL,
         total_price float NOT NULL,
-        status enum('pending', 'approved', 'rejected') DEFAULT 'pending',
-        PRIMARY KEY (id)
+        status enum('pending', 'approved', 'rejected') DEFAULT 'pending'
+        $message_column,
+        PRIMARY KEY  (id)
     ) $charset_collate;";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

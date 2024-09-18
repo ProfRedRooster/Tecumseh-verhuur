@@ -57,7 +57,9 @@ function scouting_rentals_form_shortcode() {
         <!-- Scouting Related Checkbox -->
         <label for="related_scouting">Are you related to Scouting?</label>
         <input type="checkbox" id="related_scouting" name="related_scouting" value="yes" onchange="calculatePrice()"><br>
-
+        
+        <label for="message">Heb je nog wat te zeggen:</label>
+        <textarea id="message" name="message"></textarea>
         <!-- Display the calculated total price -->
         <p>Total Price: €<span id="total_price">0.00</span></p>
 
