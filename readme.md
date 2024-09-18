@@ -13,7 +13,7 @@ Working features:
 - you can see the availability (in the form)
 - the availability function has more info in the "intranet" side of the site
 
-Features that are not working yet:
+Features that i am working on:
 - Improve the date picker so you can see the availability in selecting the date picker.
 - Make so it wil send a email 
 - translate the code and the functions to dutch
