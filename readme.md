@@ -18,10 +18,10 @@ Features that i am working on:
 - Make so it wil send a email 
 - translate the code and the functions to dutch
 
-
-Work in progress
-
-List of shortcodes with brief explaination
+List of shortcodes:
 - `scouting_rentals_form`: Shortcode for the rental form with dynamic price display.
 - `scouting_upcoming_reservations_public`: Shortcode for displaying upcoming reservations.
 - `scouting_upcoming_reservations`: Shortcode for displaying upcoming reservations with additional details.
+
+
+This is a work in progress
