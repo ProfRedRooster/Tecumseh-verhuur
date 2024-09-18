@@ -14,7 +14,6 @@ Working features:
 Features that are not working yet:
 - Stop dates that are already reserved
 - Improve the date picker so you can see the availability in selecting the dates.
-- The morning/afternoon function in the admin panel (just add an tabel in the html)
 - make an message box
 - Make so it wil send a email 
 - translate the code and the functions to dutch
