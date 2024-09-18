@@ -10,52 +10,53 @@ function scouting_rentals_form_shortcode() {
     ob_start(); ?>
     <form id="scouting-rentals-form" method="POST">
         <!-- Customer Information -->
-        <label for="name">Name:</label>
+        <label for="name">Naam:</label>
         <input type="text" id="name" name="name" required><br>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br>
 
         <!-- Date and Time -->
-        <label for="start_date">Start Date:</label>
+        <label for="start_date">Start Datum:</label>
         <input type="date" id="start_date" name="start_date" required onchange="calculatePrice()"><br>
 
-        <label for="end_date">End Date:</label>
+        <label for="end_date">Einde datum:</label>
         <input type="date" id="end_date" name="end_date" required onchange="calculatePrice()"><br>
 
-        <label for="start_period">Start Period:</label>
+        <label for="start_period">Start dagdeel:</label>
         <select id="start_period" name="start_period" onchange="calculatePrice()">
-            <option value="morning">Morning</option>
-            <option value="evening">Evening</option>
+            <option value="morning">Ochtend tot middag</option>
+            <option value="evening">Middag tot avond</option>
         </select><br>
 
-        <label for="end_period">End Period:</label>
+        <label for="end_period">Einde periode:</label>
         <select id="end_period" name="end_period" onchange="calculatePrice()">
-            <option value="morning">Morning</option>
-            <option value="evening">Evening</option>
+            <option value="morning">Ochtend tot middag</option>
+            <option value="evening">Middag tot avond</option>
         </select><br>
 
         <!-- Service Selection -->
-        <label for="service">Choose Service:</label>
+        <label for="service">Waar wilt u gebruik van maken:</label>
         <select id="service" name="service" onchange="calculatePrice()">
             <option value="field_toilets">Veld + Toiletten</option>
             <option value="field_toilets_kitchen">Veld + Toiletten + Keuken</option>
             <option value="field_toilets_kitchen_lokalen">Veld + Toiletten + Keuken + Speltaklokalen</option>
         </select><br>
 
+        <label for="number_of_people">Met hoeveel mensen ben je:</label>
         <select id="number_of_people" name="number_of_people" required onchange="calculatePrice()">
-    <option value="<25">Less than 25</option>
-    <option value="25-50">25-50</option>
-    <option value="50-100">50-100</option>
-    <option value="100+">More than 100</option>
+    <option value="<25">Minder dan 25</option>
+    <option value="25-50">25 tot 50</option>
+    <option value="50-100">50 tot 100</option>
+    <option value="100+">meer dan 100</option>
         </select>
 
         <!-- Wood Option -->
-        <label for="wood_included">Include Wood:</label>
+        <label for="wood_included">Ook hout er bij? (10 euro per dagdeel)</label>
         <input type="checkbox" id="wood_included" name="wood_included" value="yes" onchange="calculatePrice()"><br>
 
         <!-- Scouting Related Checkbox -->
-        <label for="related_scouting">Are you related to Scouting?</label>
+        <label for="related_scouting">Bent u aan scouting of Tecumseh gerelateerd?</label>
         <input type="checkbox" id="related_scouting" name="related_scouting" value="yes" onchange="calculatePrice()"><br>
         
         <label for="message">Heb je nog wat te zeggen:</label>
