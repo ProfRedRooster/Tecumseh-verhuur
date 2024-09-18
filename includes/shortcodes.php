@@ -6,11 +6,12 @@ function scouting_rentals_form_shortcode() {
     $field_toilets_kitchen_lokalen_price = get_option('field_toilets_kitchen_lokalen_price', 100);
     $wood_price = get_option('wood_price', 25);
     $scouting_discount = get_option('scouting_discount', 10);
+    $today_date = date('Y-m-d');
 
     ob_start(); ?>
     <form id="scouting-rentals-form" method="POST">
         <!-- Customer Information -->
-        <label for="name">Naam:</label>
+        <label for="name">Naam van organistie( of persoon:)</label>
         <input type="text" id="name" name="name" required><br>
 
         <label for="email">Email:</label>
@@ -18,10 +19,11 @@ function scouting_rentals_form_shortcode() {
 
         <!-- Date and Time -->
         <label for="start_date">Start Datum:</label>
-        <input type="date" id="start_date" name="start_date" required onchange="calculatePrice()"><br>
-
+          <!-- Set min attribute to today's date for start_date and add onchange event -->
+        <input type="date" id="start_date" name="start_date" required onchange="calculatePrice(); updateEndDateMin();" min="<?php echo $today_date; ?>"><br>
         <label for="end_date">Einde datum:</label>
-        <input type="date" id="end_date" name="end_date" required onchange="calculatePrice()"><br>
+         <!-- Set min attribute to today's date for end_date -->
+        <input type="date" id="end_date" name="end_date" required onchange="calculatePrice();" min="<?php echo $today_date; ?>"><br>
 
         <label for="start_period">Start dagdeel:</label>
         <select id="start_period" name="start_period" onchange="calculatePrice()">
@@ -45,10 +47,10 @@ function scouting_rentals_form_shortcode() {
 
         <label for="number_of_people">Met hoeveel mensen ben je:</label>
         <select id="number_of_people" name="number_of_people" required onchange="calculatePrice()">
-    <option value="<25">Minder dan 25</option>
-    <option value="25-50">25 tot 50</option>
-    <option value="50-100">50 tot 100</option>
-    <option value="100+">meer dan 100</option>
+            <option value="<25">Minder dan 25</option>
+            <option value="25-50">25 tot 50</option>
+            <option value="50-100">50 tot 100</option>
+            <option value="100+">meer dan 100</option>
         </select>
 
         <!-- Wood Option -->
@@ -141,6 +143,11 @@ function calculatePrice() {
 
 
         window.onload = calculatePrice;
+
+        function updateEndDateMin() {
+    var startDate = document.getElementById('start_date').value;
+    document.getElementById('end_date').setAttribute('min', startDate);
+}
     </script>
     <?php
     return ob_get_clean();
