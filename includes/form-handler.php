@@ -16,6 +16,8 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
         $days += 0.5;
     } elseif ($start_period === 'morning' && $end_period === 'morning') {
         $days += 0.5;
+    } elseif ($start_period === 'morning' && $end_period === 'evening') {
+        $days += 1;
     } else {
         $days += 0;
     }
@@ -46,13 +48,13 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     // Adjust price based on the number of people
     switch ($number_of_people) {
         case '<25':
-            $price *= 0.3;
+            $price *= 0.5;
             break;
         case '25-50':
-            $price *= 0.4;
+            $price *= 0.65;
             break;
         case '50-100':
-            $price *= 0.7;
+            $price *= 0.8;
             break;
         case '100+':
             $price *= 1.0;

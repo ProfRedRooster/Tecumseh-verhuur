@@ -86,6 +86,9 @@ function calculatePrice() {
     if (startPeriod === 'morning' && endPeriod === 'morning') {
         days += 0.5;
     }
+    if (startPeriod === 'morning' && endPeriod === 'evening') {
+        days += 1;
+    }
     else {
         days += 0;
     }
@@ -117,13 +120,13 @@ function calculatePrice() {
     // Adjust price based on the number of people
     switch (numberOfPeople) {
         case '<25':
-            price *= 0.3;
+            price *= 0.5;
             break;
         case '25-50':
-            price *= 0.4; // Example adjustment
+            price *= 0.65; // Example adjustment
             break;
         case '50-100':
-            price *= 0.7; // Example adjustment
+            price *= 0.8; // Example adjustment
             break;
         case '100+':
             price *= 1.0; // Example adjustment
