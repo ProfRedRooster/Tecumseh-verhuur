@@ -10,8 +10,8 @@ Working features:
 - the scout discount
 - the wood addons
 - the database create tool at activating
-- you can see the availability 
-- the availability has more info in the "intranet" side of the site
+- you can see the availability (in the form)
+- the availability function has more info in the "intranet" side of the site
 
 Features that are not working yet:
 - Improve the date picker so you can see the availability in selecting the date picker.
@@ -20,3 +20,8 @@ Features that are not working yet:
 
 
 Work in progress
+
+List of shortcodes with brief explaination
+- `scouting_rentals_form`: Shortcode for the rental form with dynamic price display.
+- `scouting_upcoming_reservations_public`: Shortcode for displaying upcoming reservations.
+- `scouting_upcoming_reservations`: Shortcode for displaying upcoming reservations with additional details.
