@@ -33,13 +33,6 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
             $price = $field_toilets_kitchen_lokalen_price;
             break;
     }
-    $price *= $days;
-    if ($wood_included === 'yes') {
-        $price += $wood_price * $days;
-    }
-    if ($related_scouting === 'yes') {
-        $price -= ($price * $scouting_discount / 100);
-    }
     // Adjust price based on the number of people
     switch ($number_of_people) {
         case '<25':
@@ -55,6 +48,15 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
             $price *= 1.0;
             break;
     }
+
+    $price *= $days;
+    if ($wood_included === 'yes') {
+        $price += $wood_price * $days;
+    }
+    if ($related_scouting === 'yes') {
+        $price -= ($price * $scouting_discount / 100);
+    }
+    
     return $price;
 }
 

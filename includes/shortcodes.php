@@ -114,13 +114,6 @@ function calculatePrice() {
 
     price *= days;
 
-    if (woodIncluded) {
-        price += woodPrice * days;
-    }
-
-    if (relatedScouting) {
-        price -= (price * scoutingDiscount / 100);
-    }
 
     // Adjust price based on the number of people
     switch (numberOfPeople) {
@@ -138,6 +131,13 @@ function calculatePrice() {
             break;
     }
 
+    if (woodIncluded) {
+        price += woodPrice * days;
+    }
+
+    if (relatedScouting) {
+        price -= (price * scoutingDiscount / 100);
+    }
     document.getElementById('total_price').innerText = price.toFixed(2);
 }
 
