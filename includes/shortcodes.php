@@ -1,4 +1,8 @@
 <?php
+function enqueue_scouting_rentals_css() {
+    wp_enqueue_style('scouting-rentals-css', get_stylesheet_directory_uri() . '/form-style.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_scouting_rentals_css');
 // Shortcode for the rental form with dynamic price display
 function scouting_rentals_form_shortcode() {
     $field_toilets_price = get_option('field_toilets_price', 60);
@@ -26,12 +30,13 @@ function scouting_rentals_form_shortcode() {
         <input type="date" id="end_date" name="end_date" required onchange="calculatePrice();" min="<?php echo $today_date; ?>"><br>
 
         <label for="start_period">Start dagdeel:</label>
+        <p>kies 2x middag voor een enkele avond</p>
         <select id="start_period" name="start_period" onchange="calculatePrice()">
             <option value="morning">Ochtend tot middag</option>
             <option value="evening">Middag tot avond</option>
         </select><br>
 
-        <label for="end_period">Einde periode:</label>
+        <label for="end_period">Einde dagdeel:</label>
         <select id="end_period" name="end_period" onchange="calculatePrice()">
             <option value="morning">Ochtend tot middag</option>
             <option value="evening">Middag tot avond</option>
@@ -54,7 +59,7 @@ function scouting_rentals_form_shortcode() {
         </select>
 
         <!-- Wood Option -->
-        <label for="wood_included">Ook hout er bij? (10 euro per dagdeel)</label>
+        <label for="wood_included">Ook hout er bij? (+20 euro)</label>
         <input type="checkbox" id="wood_included" name="wood_included" value="yes" onchange="calculatePrice()"><br>
 
         <!-- Scouting Related Checkbox -->
@@ -112,9 +117,6 @@ function calculatePrice() {
         price = fieldToiletsKitchenLokalenPrice;
     }
 
-    price *= days;
-
-
     // Adjust price based on the number of people
     switch (numberOfPeople) {
         case '<25':
@@ -130,9 +132,10 @@ function calculatePrice() {
             price *= 1.0; // Example adjustment
             break;
     }
+    price *= days;
 
     if (woodIncluded) {
-        price += woodPrice * days;
+        price += woodPrice;
     }
 
     if (relatedScouting) {

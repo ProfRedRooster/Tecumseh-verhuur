@@ -1,0 +1,54 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+form#scouting-rentals-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form#scouting-rentals-form label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+form#scouting-rentals-form input[type="text"],
+form#scouting-rentals-form input[type="email"],
+form#scouting-rentals-form input[type="date"],
+form#scouting-rentals-form select,
+form#scouting-rentals-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Ensures padding does not affect overall width */
+}
+
+form#scouting-rentals-form input[type="checkbox"] {
+    margin-top: 5px;
+}
+
+form#scouting-rentals-form textarea {
+    height: 100px;
+}
+
+form#scouting-rentals-form input[type="submit"] {
+    background-color: #0056b3;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+form#scouting-rentals-form input[type="submit"]:hover {
+    background-color: #004494;
+}

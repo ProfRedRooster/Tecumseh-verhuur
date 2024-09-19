@@ -51,12 +51,12 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
 
     $price *= $days;
     if ($wood_included === 'yes') {
-        $price += $wood_price * $days;
+        $price += $wood_price;
     }
     if ($related_scouting === 'yes') {
         $price -= ($price * $scouting_discount / 100);
     }
-    
+
     return $price;
 }
 
