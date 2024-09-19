@@ -18,6 +18,7 @@ Features that i am working on:
 - Improve the date picker so you can see the availability in morning/evening
 - Make so it wil send a email 
 - translate the code and the functions to dutch
+- improve the upcoming reservations with additional details.
 ---
 List of shortcodes:
 - `scouting_rentals_form`: Shortcode for the rental form with dynamic price display.
