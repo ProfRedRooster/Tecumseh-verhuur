@@ -14,7 +14,7 @@ Working features:
 - the availability function has more info in the "intranet" side of the site
 
 Features that i am working on:
-- Improve the date picker so you can see the availability in selecting the date picker.
+- Improve the date picker so you can see the availability in morning/evening
 - Make so it wil send a email 
 - translate the code and the functions to dutch
 
@@ -24,6 +24,11 @@ List of shortcodes:
 - `scouting_upcoming_reservations`: Shortcode for displaying upcoming reservations with additional details.
 
 This is a work in progress
+
+![Picture 1](readme%20fotos/1.png)
+![Picture 2](readme%20fotos/2.png)
+![Picture 3](readme%20fotos/3.png)
+![Picture 4](readme%20fotos/4.png)
 
 ## License
 
