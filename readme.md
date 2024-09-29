@@ -1,4 +1,5 @@
 Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
+Dit project maak ik voor HPG
 ---
 
 Werkende functies:
