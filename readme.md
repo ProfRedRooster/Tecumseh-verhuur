@@ -1,41 +1,43 @@
-This is the rental plugin for the Tecumseh Wordpress site.
+Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
 ---
 
-Working features:
-- The form
-- The client-side and server side price calculator
-- The admin panel
-- The settings panel
-- Upcoming Reservations 
-- The morning/afternoon function in the database + form + price calculation :)
-- the scout discount
-- the wood addons
-- the database create tool at activating
-- you can see the availability (in the form)
-- the availability function has more info in the "intranet" side of the site
+Werkende functies:
+- Het formulier
+- De prijscalculator aan zowel de klant- als serverzijde
+- Het beheerderspaneel
+- Het instellingenpaneel
+- Aankomende reserveringen
+- De ochtend/middag functie in de database + formulier + prijscalculatie :)
+- de scoutkorting
+- de houttoevoegingen
+- het database creatiegereedschap bij activatie
+- je kunt de beschikbaarheid zien (in het formulier)
+- de beschikbaarheidsfunctie heeft meer info aan de "intranet" kant van de site
 
-Features that i am working on:
-- Improve the date picker so you can see the availability in morning/evening
-- Make so it wil send a email 
-- translate the code and the functions to dutch
-- improve the upcoming reservations with additional details.
+Functies waar ik aan werk:
+- Verbeter de datumkiezer zodat je de beschikbaarheid in de ochtend/avond kunt zien
+- Zorgen dat er een e-mail wordt verzonden als er een resevering is geplaatst
+- vertaal de code en de functies naar het Nederlands
+- verbeter de aankomende reserveringen met extra details.
+- zorg dat er een overeenkomst en een factuur gegenereert word
+- zorg dat de prijs calculatie functie alleen nog maar server side word gedaan
 ---
-List of shortcodes:
-- `scouting_rentals_form`: Shortcode for the rental form with dynamic price display.
-- `scouting_upcoming_reservations_public`: Shortcode for displaying upcoming reservations.
-- `scouting_upcoming_reservations`: Shortcode for displaying upcoming reservations with additional details.
+Lijst van shortcodes:
+- `scouting_rentals_form`: Shortcode voor het verhuurformulier met dynamische prijsweergave.
+- `scouting_upcoming_reservations_public`: Shortcode voor het weergeven van aankomende reserveringen.
+- `scouting_upcoming_reservations`: Shortcode voor het weergeven van aankomende reserveringen met extra details.
 
-This is a work in progress
+Dit is een werk in uitvoering
 
 ---
-The reservations control panel
-![Picture 1](readme%20fotos/1.png)
+Het reserveringscontrolepaneel
+![Afbeelding 1](readme%20fotos/1.png)
 ---
-The price control panel
-![Picture 2](readme%20fotos/2.png)
+Het prijscontrolepaneel
+![Afbeelding 2](readme%20fotos/2.png)
 ---
-The rent form
-![Picture 3](readme%20fotos/3.png)
+Het verhuurformulier
+![Afbeelding 3](readme%20fotos/3.png)
 ---
-The Upcoming reservations panel for "stam" members
-![Picture 4](readme%20fotos/4.png)
+Het paneel voor aankomende reserveringen voor "stam" leden
+![Afbeelding 4](readme%20fotos/4.png)
