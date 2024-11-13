@@ -22,6 +22,7 @@ Functies waar ik aan werk:
 - verbeter de aankomende reserveringen met extra details.
 - zorg dat er een overeenkomst en een factuur gegenereert word
 - zorg dat de prijs calculatie functie alleen nog maar server side word gedaan
+
 ---
 Lijst van shortcodes:
 - `scouting_rentals_form`: Shortcode voor het verhuurformulier met dynamische prijsweergave.
@@ -32,13 +33,13 @@ Dit is "work in progress"
 
 ---
 Het reserveringscontrolepaneel
-![Afbeelding 1](/docs/1.png)
+![Afbeelding 1](https://verhuur.rohandg.nl/1.png)
 ---
 Het prijscontrolepaneel
-![Afbeelding 2](/docs/2.png)
+![Afbeelding 2](https://verhuur.rohandg.nl/2.png)
 ---
 Het verhuurformulier
-![Afbeelding 3](/docs/3.png)
+![Afbeelding 3](https://verhuur.rohandg.nl/3.png)
 ---
 Het paneel voor aankomende reserveringen voor "stam" leden
-![Afbeelding 4](/docs/4.png)
+![Afbeelding 4](https://verhuur.rohandg.nl/4.png)
