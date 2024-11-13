@@ -10,7 +10,7 @@ Huidige functies:
 - Aankomende reserveringen
 - De ochtend/middag functie in de database + formulier + prijscalculatie :)
 - de scoutkorting
-- de houttoevoegingen
+- de houttoevoeging
 - het database creatiegereedschap bij activatie
 - je kunt de beschikbaarheid zien (in het formulier)
 - de beschikbaarheidsfunctie heeft meer info aan de "intranet" kant van de site
