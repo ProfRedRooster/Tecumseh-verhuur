@@ -1,6 +1,6 @@
 Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
 ---
-Dit project maak ik voor HPG
+Dit project maak ik voor HPG (Honours Programma Gymnasia)
 
 Huidige functies:
 - Het formulier
