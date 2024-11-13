@@ -1,9 +1,8 @@
 Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
 ---
 Dit project maak ik voor HPG
----
 
-Werkende functies:
+Huidige functies:
 - Het formulier
 - De prijscalculator aan zowel de klant- als serverzijde
 - Het beheerderspaneel
@@ -29,17 +28,17 @@ Lijst van shortcodes:
 - `scouting_upcoming_reservations_public`: Shortcode voor het weergeven van aankomende reserveringen.
 - `scouting_upcoming_reservations`: Shortcode voor het weergeven van aankomende reserveringen met extra details.
 
-Dit is een werk in uitvoering
+Dit is "work in progress"
 
 ---
 Het reserveringscontrolepaneel
-![Afbeelding 1](readme%20fotos/1.png)
+![Afbeelding 1](/1.png)
 ---
 Het prijscontrolepaneel
-![Afbeelding 2](readme%20fotos/2.png)
+![Afbeelding 2](/2.png)
 ---
 Het verhuurformulier
-![Afbeelding 3](readme%20fotos/3.png)
+![Afbeelding 3](/3.png)
 ---
 Het paneel voor aankomende reserveringen voor "stam" leden
-![Afbeelding 4](readme%20fotos/4.png)
+![Afbeelding 4](/4.png)
