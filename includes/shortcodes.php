@@ -231,6 +231,41 @@ function scouting_upcoming_reservations_public() {
         echo "<li>$start_date $start_period to $end_date $end_period</li>";
     }
     echo '</ul>';
+    ?>
+       <div id="scouting-rentals-calendar"></div>
+
+<script>
+var reservedDates = [];
+
+// Fetch the reserved dates from the server
+fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
+    .then(response => response.json())
+    .then(data => {
+        reservedDates = data;
+        initializeCalendar(); // Initialize the calendar after the data is loaded
+    });
+
+    function initializeCalendar() {
+    var today = new Date().toISOString().split('T')[0]; // Get today's date
+
+    $("#scouting-rentals-calendar").datepicker({
+        dateFormat: "yy-mm-dd",
+        beforeShowDay: function (date) {
+            var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+
+            // Disable reserved dates
+            if (reservedDates.indexOf(dateString) !== -1) {
+                return [false, 'reserved-date', 'Reserved']; // Return false to disable and apply CSS class
+            }
+
+            // Available dates
+            return [true, 'available-date', 'Available'];
+        },
+        minDate: today
+    });
+}
+</script>
+    <?php
     return ob_get_clean();
 }
 add_shortcode('scouting_upcoming_reservations_public', 'scouting_upcoming_reservations_public');
@@ -260,6 +295,56 @@ function scouting_upcoming_reservations() {
         echo "<li>$name - $start_date $start_period to $end_date $end_period ($service)</li>";
     }
     echo '</ul>';
+    ?>
+    <div id="scouting-rentals-calendar"></div>
+
+    <script>
+    var reservedDates = [];
+    var selectedDates = [];
+
+    // Fetch the reserved dates from the server
+    fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
+        .then(response => response.json())
+        .then(data => {
+            reservedDates = data;
+            initializeCalendar(); // Initialize the calendar after the data is loaded
+        });
+
+    function initializeCalendar() {
+        var today = new Date().toISOString().split('T')[0]; // Get today's date
+
+        $("#scouting-rentals-calendar").datepicker({
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function (date) {
+                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+
+                // Disable reserved dates
+                if (reservedDates.indexOf(dateString) !== -1) {
+                    return [false, 'reserved-date', 'Reserved']; // Return false to disable and apply CSS class
+                }
+
+                // Highlight selected dates
+                if (selectedDates.indexOf(dateString) !== -1) {
+                    return [true, 'selected-date', 'Selected'];
+                }
+
+                // Available dates
+                return [true, 'available-date', 'Available'];
+            },
+            minDate: today,
+            onSelect: function (dateText) {
+                var index = selectedDates.indexOf(dateText);
+                if (index === -1) {
+                    selectedDates.push(dateText); // Add to selected dates
+                } else {
+                    selectedDates.splice(index, 1); // Remove from selected dates
+                }
+                $(this).datepicker('refresh'); // Refresh the datepicker to apply the new styles
+            }
+        });
+    }
+    </script>
+    <?php
     return ob_get_clean();
 }
 add_shortcode('scouting_upcoming_reservations', 'scouting_upcoming_reservations');
