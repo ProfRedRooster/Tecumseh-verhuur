@@ -48,10 +48,11 @@ form#scouting-rentals-form input[type="submit"]:hover {
 
 .reserved-date a {
     background-color: #ff0000 !important;
-    color: #ffffff !important; /* Ensure the text color is visible */
+    color: #FF0000 !important;
 }
 
 .available-date a {
     background-color: #CCFFCC !important;
     color: #008000 !important;
+  
 }

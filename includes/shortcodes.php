@@ -297,7 +297,6 @@ function scouting_upcoming_reservations() {
     echo '</ul>';
     ?>
     <div id="scouting-rentals-calendar"></div>
-
     <script>
     var reservedDates = [];
     var selectedDates = [];
