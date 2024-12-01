@@ -62,7 +62,7 @@ function scouting_rentals_form_shortcode() {
         </select><br>
 
         <!-- Wood Option -->
-        <label for="wood_included">Ook hout erbij? (+20 euro)</label>
+        <label for="wood_included">Ook hout erbij?</label>
         <input type="checkbox" id="wood_included" name="wood_included" value="yes" onchange="calculatePrice()"><br>
 
         <!-- Scouting Related Checkbox -->
@@ -108,74 +108,38 @@ function scouting_rentals_form_shortcode() {
             minDate: today
         });
     }
+function calculatePrice() {
+    var startDate = document.getElementById('start_date').value;
+    var endDate = document.getElementById('end_date').value;
+    var startPeriod = document.getElementById('start_period').value;
+    var endPeriod = document.getElementById('end_period').value;
+    var service = document.getElementById('service').value;
+    var woodIncluded = document.getElementById('wood_included').checked ? 'yes' : 'no';
+    var relatedScouting = document.getElementById('related_scouting').checked ? 'yes' : 'no';
+    var numberOfPeople = document.getElementById('number_of_people').value;
 
-    function calculatePrice() {
-        var fieldToiletsPrice = <?php echo $field_toilets_price; ?>;
-        var fieldToiletsKitchenPrice = <?php echo $field_toilets_kitchen_price; ?>;
-        var fieldToiletsKitchenLokalenPrice = <?php echo $field_toilets_kitchen_lokalen_price; ?>;
-        var woodPrice = <?php echo $wood_price; ?>;
-        var scoutingDiscount = <?php echo $scouting_discount; ?>;
+    var data = {
+        action: 'calculate_price',
+        start_date: startDate,
+        end_date: endDate,
+        start_period: startPeriod,
+        end_period: endPeriod,
+        service: service,
+        wood_included: woodIncluded,
+        related_scouting: relatedScouting,
+        number_of_people: numberOfPeople
+    };
 
-        var startDate = new Date(document.getElementById('start_date').value);
-        var endDate = new Date(document.getElementById('end_date').value);
-        var startPeriod = document.getElementById('start_period').value;
-        var endPeriod = document.getElementById('end_period').value;
-
-        var timeDiff = endDate.getTime() - startDate.getTime();
-        var days = timeDiff / (1000 * 3600 * 24);
-
-        if (startPeriod === 'evening' && endPeriod === 'evening') {
-            days += 0.5;
+    jQuery.post("<?php echo admin_url('admin-ajax.php'); ?>", data, function(response) {
+        if (response.success) {
+            document.getElementById('total_price').innerText = response.data.price.toFixed(2);
+        } else {
+            alert('Error calculating price: ' + response.data);
         }
-        if (startPeriod === 'morning' && endPeriod === 'morning') {
-            days += 0.5;
-        }
-        if (startPeriod === 'morning' && endPeriod === 'evening') {
-            days += 1;
-        }
+    });
+}
 
-        var service = document.getElementById('service').value;
-        var woodIncluded = document.getElementById('wood_included').checked;
-        var relatedScouting = document.getElementById('related_scouting').checked;
-        var numberOfPeople = document.getElementById('number_of_people').value;
-
-        var price = 0;
-        if (service == 'field_toilets') {
-            price = fieldToiletsPrice;
-        } else if (service == 'field_toilets_kitchen') {
-            price = fieldToiletsKitchenPrice;
-        } else if (service == 'field_toilets_kitchen_lokalen') {
-            price = fieldToiletsKitchenLokalenPrice;
-        }
-
-        // Adjust price based on the number of people
-        switch (numberOfPeople) {
-            case '<25':
-                price *= 0.5;
-                break;
-            case '25-50':
-                price *= 0.65;
-                break;
-            case '50-100':
-                price *= 0.8;
-                break;
-            case '100+':
-                price *= 1.0;
-                break;
-        }
-        price *= days;
-
-        if (woodIncluded) {
-            price += woodPrice;
-        }
-
-        if (relatedScouting) {
-            price -= (price * scoutingDiscount / 100);
-        }
-        document.getElementById('total_price').innerText = price.toFixed(2);
-    }
-
-    window.onload = calculatePrice;
+window.onload = calculatePrice;
     </script>
     <?php
     return ob_get_clean();

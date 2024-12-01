@@ -146,4 +146,26 @@ function handle_scouting_rentals_submission() {
     }
 }
 add_action('wp', 'handle_scouting_rentals_submission');
+
+add_action('wp_ajax_calculate_price', 'ajax_calculate_price');
+add_action('wp_ajax_nopriv_calculate_price', 'ajax_calculate_price');
+
+function ajax_calculate_price() {
+    if (!isset($_POST['number_of_people'], $_POST['service'], $_POST['wood_included'], $_POST['related_scouting'], $_POST['start_date'], $_POST['end_date'], $_POST['start_period'], $_POST['end_period'])) {
+        wp_send_json_error('Missing parameters');
+    }
+
+    $number_of_people = sanitize_text_field($_POST['number_of_people']);
+    $service = sanitize_text_field($_POST['service']);
+    $wood_included = sanitize_text_field($_POST['wood_included']);
+    $related_scouting = sanitize_text_field($_POST['related_scouting']);
+    $start_date = sanitize_text_field($_POST['start_date']);
+    $end_date = sanitize_text_field($_POST['end_date']);
+    $start_period = sanitize_text_field($_POST['start_period']);
+    $end_period = sanitize_text_field($_POST['end_period']);
+
+    $price = calculate_total_price($number_of_people, $service, $wood_included, $related_scouting, $start_date, $end_date, $start_period, $end_period);
+
+    wp_send_json_success(['price' => $price]);
+}
 ?>
