@@ -22,10 +22,10 @@ function scouting_rentals_admin_page() {
     $table_name = $wpdb->prefix . 'scouting_rentals';
     $results = $wpdb->get_results("SELECT * FROM $table_name");
     echo '<div class="scouting-rentals-admin">';
-    echo '<h1>Manage Rental Requests</h1>';
+    echo '<h1>Beheer verhuur aanvragen</h1>';
     echo '<table class="widefat fixed" cellspacing="0">';
     // Add headers for Start Period, End Period, and Message
-    echo '<thead><tr><th>Name</th><th>Email</th><th>Start Date</th><th>End Date</th><th>Start Period</th><th>End Period</th><th>People</th><th>Price</th><th>Status</th><th>Service</th><th>Wood Included</th><th>Message</th><th>Actions</th></tr></thead>';
+    echo '<thead><tr><th>Naam</th><th>Email</th><th>Begin datum</th><th>End datum</th><th>Begin dagdeel</th><th>Eind dagdeel</th><th>Hoeveel mensen</th><th>Prijs</th><th>Status</th><th>Wat huren ze</th><th>Hout er bij?</th><th>Bericht</th><th>Acties</th></tr></thead>';
     echo '<tbody>';
     foreach ($results as $row) {
         // Ensure properties exist before accessing them
