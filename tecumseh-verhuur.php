@@ -8,7 +8,7 @@
  * Plugin Name:       Tecumseh Verhuur
  * Plugin URI:        https://github.com/ProfRedRooster/Tecumseh-verhuur/
  * Description:       Administratie verhuur en verhuur formulieren
- * Version:           0.0.4
+ * Version:           0.0.5
  * Author:            Rohan de Graaf
  * Author URI:        https://rohandg.nl/
  * Text Domain:       tecumseh_beheer

@@ -5,7 +5,7 @@ Dit project maak ik voor HPG (Honours Programma Gymnasia)
 Huidige functies:
 - Het formulier
 - De prijscalculator is serverzijde
-- Het beheerderspaneel
+- Het beheerderspaneel 
 - Het instellingenpaneel
 - Aankomende reserveringen
 - De ochtend/middag functie in de database + formulier + prijscalculatie :)
@@ -30,7 +30,7 @@ Lijst van shortcodes:
 Dit is "work in progress"
 
 ---
-Het reserveringscontrolepaneel
+Het reserveringscontrolepaneel (Je kan alle gegevens makkelijk aanpassen)
 ![Afbeelding 1](https://verhuur.rohandg.nl/1.png)
 ---
 Het prijscontrolepaneel
