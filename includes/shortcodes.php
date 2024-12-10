@@ -55,10 +55,10 @@ function scouting_rentals_form_shortcode() {
 
         <label for="number_of_people">Met hoeveel mensen ben je:</label>
         <select id="number_of_people" name="number_of_people" required onchange="calculatePrice()">
-            <option value="<25">Minder dan 25</option>
+            <option value="onder-25">Minder dan 25</option>
             <option value="25-50">25 tot 50</option>
             <option value="50-100">50 tot 100</option>
-            <option value="100+">Meer dan 100</option>
+            <option value="100-plus">Meer dan 100</option>
         </select><br>
 
         <!-- Wood Option -->

@@ -5,6 +5,10 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     $field_toilets_kitchen_price = get_option('field_toilets_kitchen_price', 75);
     $field_toilets_kitchen_lokalen_price = get_option('field_toilets_kitchen_lokalen_price', 100);
     $wood_price = get_option('wood_price', 25);
+    $varonder25 = get_option('onder25', 0.50);
+    $var25tot50 = get_option('25tot50', 0.65);
+    $var50tot100 = get_option('50tot100', 0.8);
+    $var100plus = get_option('100plus', 1);
     $scouting_discount = get_option('scouting_discount', 10);
     // Calculate the difference in days
     $startDateTime = new DateTime($start_date);
@@ -35,17 +39,17 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     }
     // Adjust price based on the number of people
     switch ($number_of_people) {
-        case '<25':
-            $price *= 0.5;
+        case 'onder-25':
+            $price *= $varonder25;
             break;
         case '25-50':
-            $price *= 0.65;
+            $price *= $var25tot50;
             break;
         case '50-100':
-            $price *= 0.8;
+            $price *= $var50tot100;
             break;
-        case '100+':
-            $price *= 1.0;
+        case '100-plus':
+            $price *= $var100plus;
             break;
     }
 
