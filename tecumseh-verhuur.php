@@ -8,18 +8,20 @@
  * Plugin Name:       Tecumseh Verhuur
  * Plugin URI:        https://github.com/ProfRedRooster/Tecumseh-verhuur/
  * Description:       Administratie verhuur en verhuur formulieren
- * Version:           0.0.5
+ * Version:           0.0.6
  * Author:            Rohan de Graaf
  * Author URI:        https://rohandg.nl/
  * Text Domain:       tecumseh_beheer
+ * Requires PHP:      7.1
+ * Requires at least: 5.2
 */
 
 // Include necessary files
+include_once plugin_dir_path(__FILE__) . 'includes/dompdf/autoload.inc.php';
 include_once plugin_dir_path(__FILE__) . 'includes/form-handler.php';
 include_once plugin_dir_path(__FILE__) . 'includes/admin-page.php';
 include_once plugin_dir_path(__FILE__) . 'includes/shortcodes.php';
 include_once plugin_dir_path(__FILE__) . 'includes/settings-page.php';
-
 
 // Create the database table on activation
 function scouting_rentals_install() {

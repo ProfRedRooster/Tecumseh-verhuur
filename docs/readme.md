@@ -13,13 +13,14 @@ Huidige functies:
 - de houttoevoeging
 - je kunt de beschikbaarheid zien (in het formulier)
 - de beschikbaarheidsfunctie heeft meer info aan de "intranet" kant van de site
+- het automatisch invullen van het verhuurders overeenkomst
 
 Functies waar ik aan werk:
 - Verbeter de datumkiezer zodat je de beschikbaarheid in de ochtend/avond kunt zien
 - Zorgen dat er een e-mail wordt verzonden als er een resevering is geplaatst
-- vertaal de code en de functies naar het Nederlands
+- vertaal sommige code en de functies naar het Nederlands
 - verbeter de aankomende reserveringen met extra details.
-- zorg dat er een overeenkomst en een factuur gegenereert word
+- zorg dat er een factuur gegenereert word
 
 ---
 Lijst van shortcodes:
