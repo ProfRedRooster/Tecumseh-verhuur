@@ -15,11 +15,11 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     $endDateTime = new DateTime($end_date);
     $diff = $startDateTime->diff($endDateTime);
     $days = $diff->days;
-    if ($start_period === 'evening' && $end_period === 'evening') {
+    if ($start_period === 'avond' && $end_period === 'avond') {
         $days += 0.5;
-    } elseif ($start_period === 'morning' && $end_period === 'morning') {
+    } elseif ($start_period === 'ochtend' && $end_period === 'ochtend') {
         $days += 0.5;
-    } elseif ($start_period === 'morning' && $end_period === 'evening') {
+    } elseif ($start_period === 'ochtend' && $end_period === 'avond') {
         $days += 1;
     } else {
         $days += 0;

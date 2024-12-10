@@ -29,20 +29,20 @@ function scouting_rentals_form_shortcode() {
         <label for="start_date">Start Datum:</label>
         <input type="text" id="start_date" name="start_date" required onchange="calculatePrice()"><br>
 
-        <label for="end_date">Einde datum:</label>
+        <label for="end_date">Eind datum:</label>
         <input type="text" id="end_date" name="end_date" required onchange="calculatePrice()"><br>
 
         <label for="start_period">Start dagdeel:</label>
         <p>Kies 2x middag voor een enkele avond</p>
         <select id="start_period" name="start_period" onchange="calculatePrice()">
-            <option value="morning">Ochtend tot middag</option>
-            <option value="evening">Middag tot avond</option>
+            <option value="ochtend">Ochtend tot middag</option>
+            <option value="avond">Middag tot avond</option>
         </select><br>
 
-        <label for="end_period">Einde dagdeel:</label>
+        <label for="end_period">Eind dagdeel:</label>
         <select id="end_period" name="end_period" onchange="calculatePrice()">
-            <option value="morning">Ochtend tot middag</option>
-            <option value="evening">Middag tot avond</option>
+            <option value="ochtend">Ochtend tot middag</option>
+            <option value="avond">Middag tot avond</option>
         </select><br>
 
         <!-- Service Selection -->
