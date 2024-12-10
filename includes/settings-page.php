@@ -21,6 +21,7 @@ function scouting_rentals_settings_init() {
     register_setting('scouting_rentals_settings_group', 'field_toilets_kitchen_lokalen_price');
     register_setting('scouting_rentals_settings_group', 'scouting_discount');
     register_setting('scouting_rentals_settings_group', 'wood_price');
+    register_setting('scouting_rentals_settings_group', 'borg');
     register_setting('scouting_rentals_settings_group', 'onder25');
     register_setting('scouting_rentals_settings_group', '25tot50');
     register_setting('scouting_rentals_settings_group', '50tot100');
@@ -60,6 +61,11 @@ function scouting_rentals_settings_page() {
                 <tr valign="top">
                     <th scope="row">Prijs voor hout (Optional)</th>
                     <td><input type="text" name="wood_price" value="<?php echo esc_attr(get_option('wood_price', '25')); ?>" /></td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Borg prijs</th>
+                    <td><input type="text" name="borg" value="<?php echo esc_attr(get_option('borg', '200')); ?>" /></td>
                 </tr>
 
                 <tr valign="top">

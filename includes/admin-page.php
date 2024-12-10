@@ -134,7 +134,6 @@ function handle_scouting_rentals_actions() {
         $rental = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}scouting_rentals WHERE id = $id");
         $dompdf = new Dompdf\Dompdf();
         $html = '<h1>Factuur</h1>';
-        $html .= '<p>Naam: ' . esc_html($rental->name) . '</p>';
         $dompdf->loadHtml($html);
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'landscape');
@@ -145,55 +144,181 @@ function handle_scouting_rentals_actions() {
     }
     if (isset($_GET['contract'])) {
         $id = intval($_GET['contract']);
+        $borg = get_option('borg', 201);
         $rental = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}scouting_rentals WHERE id = $id");
         $dompdf = new Dompdf\Dompdf();
-        $html = '<h1>Huurovereenkomst voor het gebouw en terrein van de vereniging Scouting Tecumseh in Haren (GN)</h1>';
-        $html .= '<p>De ondergetekenden:</p>';
-        $html .= '<p>1. Vereniging Scouting Tecumseh, gevestigd te Haren (Gn.) Kamer Van Koophandel nr. 54395356 p/a Berkenlaan 30 9751 GR Haren (Gn.), hierna te noemen "Tecumseh".</p>';
-        $html .= '<p>2. Naam: ' . esc_html($rental->name) . '</p>';
-        $html .= '<p> e-mail: ' . esc_html($rental->email) . '</p>';
-        $html .= '<h2>Verklaren:</2>';
-        $html .= '<p>Tecumseh verhuurt aan de onder 2 genoemde organisatie, hierna te noemen "de huurder", haar hoofdgebouw (aangeduid als "groepsgebouw") op perceel Rollematen 2 te Haren gelegen;</p>';
-        $html .= '<ul>';
-        $html .= '<li>het groepsgebouw en de omliggende terreinen;</li>';
-        $html .= '<li>het groepsgebouw, de omliggende terreinen, en de materialen en goederen op de inventarislijst die Tecumseh en de huurder ondertekend hebben;</li>';
-        $html .= '<li>de omliggende terreinen en de toiletgelegenheid in het gebouw;</li>';
-        $html .= '<li>de omliggende terreinen, de toiletgelegenheid in het gebouw en de materialen en goederen op de inventarislijst die Tecumseh en de huurder ondertekend hebben.</li>';
-        $html .= '</ul>';
-        $html .= '<p>Deze overeenkomst van huur en verhuur wordt aangegaan onder de volgende bepalingen en bedingen:</p>';
-        $html .= '<h2>Artikel 1: de huurprijs:</h2><p> € ' . esc_html($rental->total_price) . ' ,- De prijs is inclusief BTW en het borgbedrag De huurprijs moet voor de huurperiode op de rekening van Tecumseh gestort worden op rekening: NL71 ABNA 0571 1612 78 ter name van: Vereniging Scouting Tecumseh te Haren onder vermelding van: het factuurnummer</p>';
-        $html .= '<h2>Artikel 2: aantal personen:</h2><p> De huurder moet opgeven met hoeveel personen hij maximaal komt. Dit maximale aantal mag zonder overleg met Tecumseh niet overschreden worden. Aantal personen door huurder opgegeven: 1 tot 25 Bij een evenement met meer dan 100 personen dient formeel een evenementen vergunning te worden aangevraagd bij de gemeente Groningen (meerschap) (doorlooptijd ca 8 weken).</p>';
-        $html .= '<h2>Artikel 3: waarborgsom</h2><p> De huurder moet voor de aanvang van de huurperiode een borgsom storten van € 200 ,- Dit bedrag wordt binnen 14 dagen teruggeboekt als er geen schade is en de huurder aan alle verplichtingen die voorvloeien uit deze overeenkomst heeft voldaan.</p>';
-        $html .= '<h2>Artikel 4: huurperiode</h2><p> De overeengekomen huurperiode bestaat uit de volgende tijdstippen en datum(s): Tijdstip aankomst: in de ' . esc_html($rental->start_period) . ' van ' . esc_html($rental->start_date) . ', tot de : ' . esc_html($rental->end_period) . ' van ' . esc_html($rental->end_date) . '';
-        $html .= '<h2>Artikel 5: zorgplicht en de aansprakelijkheid voor schade</h2><p>De huurder ontvangt het gehuurde in nette staat en moet het na de huurperiode in dezelfde staat weer opleveren. Het gebouw en de omliggende terreinen moeten schoongemaakt en opgeruimd worden. Als dit niet is gebeurd dan kan Tecumseh € 50 ,- in mindering brengen op de terug te betalen waarborgsom. De huurder moet aan het einde van de huurperiode de sleutels aan een door Tecumseh aangewezen persoon overhandigen. Deze zal samen met de huurder het gehuurde inspecteren en de huurder zo nodig aansprakelijk stellen voor schade aan het gebouw en/of de inventaris. Als er goederen of materialen ontbreken die bij het begin van de huurperiode aanwezig waren, dan moeten die op kosten van de huurder worden vervangen. Als er schade is ontstaan door toedoen van de huurder, dan moet deze de schade op zijn kosten laten herstellen. Deze kosten worden van de waarborgsom afgetrokken. Als deze kosten hoger zijn dan de waarborgsom, dan is de huurder aansprakelijk voor het resterende bedrag.</p>';
-        $html .= '<h2>Artikel 6: annuleringsclausule</h2><p>De huurder kan tot uiterlijk twee maanden voor de huurperiode de overeenkomst zonder kosten opzeggen. Wanneer de huurder na twee maanden, maar voor een maand voor de huurperiode de overeenkomst opzegt, dan moet hij een bedrag van € 50 ,- betalen. Wanneer Tecumseh een andere huurder vindt voor de verhuurperiode, dan wordt dit bedrag teruggestort. Als de huurder binnen een maand voor de verhuurperiode opzegt dan moet hij € 75 ,- betalen. Wanneer Tecumseh voor de verhuurperiode alsnog een huurder vindt dan zal dit bedrag worden teruggestort.</p>';
-        $html .= '<h2>Artikel 7: beperking gebruik gehuurde</h2><p>Het is de huurder verboden het gehuurde geheel of gedeeltelijk in onderhuur af te staan.</p>';
-        $html .= '<h2>Artikel 8: overnachten</h2><p>In het groepsgebouw mag alleen in de lokalen met branduitgang worden overnacht.</p>';
-        $html .= '<h2>Artikel 9: rechten</h2><p>verhuurder Tecumseh mag het gebouw en de omliggende terreinen altijd betreden tijdens de huurperiode.</p>';
-        $html .= '<h2>Artikel 10: vrijwaring voor schade</h2><p>De huurder vrijwaart Tecumseh voor elke aanspraak op vergoeding voor materiële schade, en letsel van personen die voortvloeien uit het gebruik van het gehuurde (inclusief spelmaterialen en speeltoestellen).</p>';
-        $html .= '<h2>Artikel 11: eerste hulp.</h2><p>De huurder is zelf verantwoordelijk voor het verlenen van eerste medische hulp.</p>';
-        $html .= '<h2>Artikel 12: brandveiligheid</h2><p>De brandblussers, brandslang en de branddeken moeten altijd op hun vaste plek blijven. De nooduitgangen mogen nooit binnen of buiten het gebouw worden geblokkeerd. De vluchtrouteaanduidingen mogen niet worden afgedekt. De huurder moet er op toezien dat er geen brandgevaar ontstaat; het gasfornuis en andere brandgevoelige zaken in het gebouw, het kampvuur, BBQ’s en dergelijke op het terrein moeten na gebruik altijd goed gecontroleerd en gedoofd worden. Dingen die extra brandgevaar opleveren zoals kaarsen, olielampen en gasbranders mogen niet in het groepsgebouw gebruikt worden.</p>';
-        $html .= '<h2>Artikel 13: roken</h2><p>Roken is in het gebouw verboden. Als er op het terrein gerookt wordt dan moeten de peuken goed gedoofd en opgeruimd worden.</p>';
-        $html .= '<h2>Artikel 14: brandschade</h2><p>Als er tijdens de huurperiode door toedoen van een persoon of personen waarvoor de huurder aansprakelijk gesteld kan worden brandschade ontstaat, dan is de huurder voor die schade aansprakelijk.</p>';
-        $html .= '<h2>Artikel 15: geluidsapparatuur</h2><p>Het gebruik van geluidsapparatuur in het gebouw en op het terrein is alleen toegestaan als er geen overlast voor omwonenden wordt veroorzaakt. Bij evenementen waarbij het veroorzaken van geluidshinder in de lijn de verwachting ligt, adviseren wij de huurder om de omwonenden daarvan schriftelijk op de hoogte te stellen.</p>';
-        $html .= '<h2>Artikel 16: kampvuren</h2><p>Er mag alleen een kampvuur in de speciale kampvuurplaats gemaakt worden en nadat Tecumseh daarvoor uitdrukkelijk toestemming heeft gegeven. Het vuur mag niet hoger opgestookt worden dan een meter. Als de gemeente beperkingen oplegt, zoals een stookverbod, dan moeten die strikt nageleefd worden.</p>';
-        $html .= '<h2>Artikel 17: afval</h2><p>Tecumseh maakt met de huurder bij aankomst afspraken over de afvoer van het afval. Afval mag ’s nachts nooit open op het terrein achterblijven omdat dit ongedierte aantrekt.</p>';
-        $html .= '<h2>Artikel 18: overlast algemeen</h2><p>De huurder moet als een ‘goede huisvader’ met het gehuurde om gaan en overlast of hinder aan de andere gebruikers van het scoutingeiland en de omwonenden voorkomen.</p>';
-        $html .= '<h2>Artikel 19: toegang tot terreinen van de andere scoutinggroepen</h2><p>De huurders mogen niet op de terreinen van de andere scoutinggroepen op het scoutingeiland komen tenzij zij daarvoor uitdrukkelijk worden uitgenodigd door die groepen.</p>';
-        $html .= '<h2>Artikel 20: ontbinding</h2><p>Als de huurder niet aan de verplichtingen van deze overeenkomst voldoet dan is Tecumseh bevoegd om de overeenkomst met onmiddellijke ingang te ontbinden. Restitutie van de in artikel 2 genoemde waarborgsom evenals van de eventuele restant huursom zal in dat geval niet plaatsvinden. In geval van faillissement of van surseance van betaling verleend aan de huurder zijn de curator van de huurder dan wel haar vereffenaars aansprakelijk voor de voldoening van alle voor de huurder uit deze overeenkomst voortvloeiende verplichtingen.</p>';
-        $html .= '<h2>Artikel 21: opzegging van de huurovereenkomst</h2><p>Opzegging van deze overeenkomst moet per aangetekende brief worden gedaan.</p>';
-        $html .= '<p>Overeengekomen te Haren, Groningen</p>';
-        $html .= '<p>THIS DATE</p>';
-        $html .= '<p>R.S. de Graaf</p>';
-        $html .= '<p>Namens de verhuurder</p>';
-        $html .= '<p>' . esc_html($rental->name) . '</p>';
-        $html .= '<p>Namens de huurder</p>';
+        
+        $image_path_handtekening = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/rohanhandtekening-e1733859959740.png';
+        $image_data_handtekening = file_get_contents($image_path_handtekening);
+        $base64_image_handtekening = base64_encode($image_data_handtekening);
+
+        $image_path_logo = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/logo-2-3.png';
+        $image_data_logo = file_get_contents($image_path_logo);
+        $base64_image_logo = base64_encode($image_data_logo);
+  
+        $html = '
+        <!DOCTYPE html>
+        <html lang="nl">
+        <head>
+            <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            padding: 20px;
+            background: white;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        h1 {
+            color: #004080;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #004080;
+            border-bottom: 2px solid #004080;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+        </head>
+        <body>
+        
+        <div class="header">
+            <img src="data:image/png;base64,' . $base64_image_logo . '" alt="Signature">
+        </div>
+        
+        <h1>Huurovereenkomst voor het gebouw en terrein van de vereniging Scouting Tecumseh in Haren (GN)</h1>
+        
+        <p>De ondergetekenden:</p>
+        <p>1. Vereniging Scouting Tecumseh, gevestigd te Haren (Gn.) Kamer Van Koophandel nr. 54395356 p/a Berkenlaan 30 9751 GR Haren (Gn.), hierna te noemen "Tecumseh".</p>
+        <p>2. Naam: <strong>' . esc_html($rental->name) . '</strong> met de e-mail: <strong>' . esc_html($rental->email) . '</strong></p>
+        
+        <h2>Verklaren:</h2>
+        <p>Tecumseh verhuurt aan de onder 2 genoemde organisatie, hierna te noemen "de huurder", haar hoofdgebouw (aangeduid als "groepsgebouw") op perceel Rollematen 2 te Haren gelegen;<p>
+        <ul>
+            <li>het groepsgebouw en de omliggende terreinen;</li>
+            <li>het groepsgebouw, de omliggende terreinen, en de materialen en goederen op de inventarislijst die Tecumseh en de huurder ondertekend hebben;</li>
+            <li>de omliggende terreinen en de toiletgelegenheid in het gebouw;</li>
+            <li>de omliggende terreinen, de toiletgelegenheid in het gebouw en de materialen en goederen op de inventarislijst die Tecumseh en de huurder ondertekend hebben.</li>
+        </ul>
+        <p>Deze overeenkomst van huur en verhuur wordt aangegaan onder de volgende bepalingen en bedingen:</p>
+        <h2>Artikel 1: de huurprijs</h2>
+        <p>€ <strong>' . esc_html($rental->total_price + $borg) . '</strong> ,-</p>
+        <p>De prijs is inclusief BTW en het borgbedrag</p>
+        <p>De huurprijs moet voor de huurperiode op de rekening van Tecumseh gestort worden op rekening: NL71 ABNA 0571 1612 78 ter name van: Vereniging Scouting Tecumseh te Haren onder vermelding van: het factuurnummer</p>
+        
+        <h2>Artikel 2: aantal personen</h2>
+        <p> De huurder moet opgeven met hoeveel personen hij maximaal komt. Dit maximale aantal mag zonder overleg met Tecumseh niet overschreden worden. Aantal personen door huurder opgegeven: <strong>' . esc_html($rental->number_of_people) . '</strong>  Bij een evenement met meer dan 100 personen dient formeel een evenementen vergunning te worden aangevraagd bij de gemeente Groningen (meerschap) (doorlooptijd ca 8 weken).</p>
+        
+        <h2>Artikel 3: waarborgsom</h2>
+        <p> De huurder moet voor de aanvang van de huurperiode een borgsom storten van € 200 ,- Dit bedrag wordt binnen 14 dagen teruggeboekt als er geen schade is en de huurder aan alle verplichtingen die voorvloeien uit deze overeenkomst heeft voldaan.</p>
+        
+        <h2>Artikel 4: huurperiode</h2>
+        <p>De overeengekomen huurperiode bestaat uit de volgende tijdstippen en datum(s):<br>
+        Tijdstip aankomst: in de <strong>' . esc_html($rental->start_period) . '</strong> van <strong>' . esc_html($rental->start_date) . '</strong>, tot de <strong>' . esc_html($rental->end_period) . '</strong> van <strong>' . esc_html($rental->end_date) . '</strong>.</p>
+        
+        <h2>Artikel 5: zorgplicht en de aansprakelijkheid voor schade</h2>
+        <p>De huurder ontvangt het gehuurde in nette staat en moet het na de huurperiode in dezelfde staat weer opleveren. Het gebouw en de omliggende terreinen moeten schoongemaakt en opgeruimd worden. Als dit niet is gebeurd dan kan Tecumseh € 50 ,- in mindering brengen op de terug te betalen waarborgsom. De huurder moet aan het einde van de huurperiode de sleutels aan een door Tecumseh aangewezen persoon overhandigen. Deze zal samen met de huurder het gehuurde inspecteren en de huurder zo nodig aansprakelijk stellen voor schade aan het gebouw en/of de inventaris. Als er goederen of materialen ontbreken die bij het begin van de huurperiode aanwezig waren, dan moeten die op kosten van de huurder worden vervangen. Als er schade is ontstaan door toedoen van de huurder, dan moet deze de schade op zijn kosten laten herstellen. Deze kosten worden van de waarborgsom afgetrokken. Als deze kosten hoger zijn dan de waarborgsom, dan is de huurder aansprakelijk voor het resterende bedrag.</p>
+        
+        <h2>Artikel 6: annuleringsclausule</h2>
+        <p>De huurder kan tot uiterlijk twee maanden voor de huurperiode de overeenkomst zonder kosten opzeggen. Wanneer de huurder na twee maanden, maar voor een maand voor de huurperiode de overeenkomst opzegt, dan moet hij een bedrag van € 50 ,- betalen. Wanneer Tecumseh een andere huurder vindt voor de verhuurperiode, dan wordt dit bedrag teruggestort. Als de huurder binnen een maand voor de verhuurperiode opzegt dan moet hij € 75 ,- betalen. Wanneer Tecumseh voor de verhuurperiode alsnog een huurder vindt dan zal dit bedrag worden teruggestort.</p>
+        
+        <h2>Artikel 7: beperking gebruik gehuurde</h2>
+        <p>Het is de huurder verboden het gehuurde geheel of gedeeltelijk in onderhuur af te staan.</p>
+        
+        <h2>Artikel 8: overnachten</h2>
+        <p>In het groepsgebouw mag alleen in de lokalen met branduitgang worden overnacht.</p>
+        
+        <h2>Artikel 9: rechten</h2>
+        <p>verhuurder Tecumseh mag het gebouw en de omliggende terreinen altijd betreden tijdens de huurperiode.</p>
+        
+        <h2>Artikel 10: vrijwaring voor schade</h2>
+        <p>De huurder vrijwaart Tecumseh voor elke aanspraak op vergoeding voor materiële schade...</p>
+        
+        <h2>Artikel 11: eerste hulp</h2>
+        <p>De huurder is zelf verantwoordelijk voor het verlenen van eerste medische hulp.</p>
+        
+        <h2>Artikel 12: brandveiligheid</h2>
+        <p>De huurder vrijwaart Tecumseh voor elke aanspraak op vergoeding voor materiële schade, en letsel van personen die voortvloeien uit het gebruik van het gehuurde (inclusief spelmaterialen en speeltoestellen).</p>
+        
+        <h2>Artikel 13: roken</h2>
+        <p>De huurder is zelf verantwoordelijk voor het verlenen van eerste medische hulp.</p>
+        
+        <h2>Artikel 14: brandschade</h2>
+        <p>Als er tijdens de huurperiode door toedoen van een persoon of personen waarvoor de huurder aansprakelijk gesteld kan worden brandschade ontstaat, dan is de huurder voor die schade aansprakelijk.</p>
+        
+        <h2>Artikel 15: geluidsapparatuur</h2>
+        <p>Het gebruik van geluidsapparatuur in het gebouw en op het terrein is alleen toegestaan als er geen overlast voor omwonenden wordt veroorzaakt. Bij evenementen waarbij het veroorzaken van geluidshinder in de lijn de verwachting ligt, adviseren wij de huurder om de omwonenden daarvan schriftelijk op de hoogte te stellen.</p>
+        
+        <h2>Artikel 16: kampvuren</h2>
+        <p>Er mag alleen een kampvuur in de speciale kampvuurplaats gemaakt worden en nadat Tecumseh daarvoor uitdrukkelijk toestemming heeft gegeven. Het vuur mag niet hoger opgestookt worden dan een meter. Als de gemeente beperkingen oplegt, zoals een stookverbod, dan moeten die strikt nageleefd worden.</p>
+        
+        <h2>Artikel 17: afval</h2>
+        <p>Tecumseh maakt met de huurder bij aankomst afspraken over de afvoer van het afval. Afval mag `s nachts nooit open op het terrein achterblijven omdat dit ongedierte aantrekt.</p>
+        
+        <h2>Artikel 18: overlast algemeen</h2>
+        <p>De huurder moet overlast of hinder aan de andere gebruikers voorkomen...</p>
+        
+        <h2>Artikel 19: toegang tot terreinen van de andere scoutinggroepen</h2>
+        <p>De huurder moet als een "goede huisvader" met het gehuurde om gaan en overlast of hinder aan de andere gebruikers van het scoutingeiland en de omwonenden voorkomen.</p>
+        
+        <h2>Artikel 20: ontbinding</h2>
+        <p>Als de huurder niet aan de verplichtingen van deze overeenkomst voldoet dan is Tecumseh bevoegd om de overeenkomst met onmiddellijke ingang te ontbinden. Restitutie van de in artikel 2 genoemde waarborgsom evenals van de eventuele restant huursom zal in dat geval niet plaatsvinden. In geval van faillissement of van surseance van betaling verleend aan de huurder zijn de curator van de huurder dan wel haar vereffenaars aansprakelijk voor de voldoening van alle voor de huurder uit deze overeenkomst voortvloeiende verplichtingen.</p>
+        
+        <h2>Artikel 21: opzegging van de huurovereenkomst</h2>
+        <p>Opzegging van deze overeenkomst moet per aangetekende brief worden gedaan.</p>
+        
+<div class="signature-section">
+    <p>Overeengekomen te Haren, Groningen</p>
+    <p><strong>' . date("d-m-Y") . '</strong></p>
+    <table style="width: 100%; margin-top: 50px;">
+        <tr>
+            <td style="width: 50%; text-align: left; vertical-align: top">
+                <p><strong>' . esc_html($rental->name) . '</strong><br>Namens de huurder</p>
+            </td>
+            <td style="width: 50%; text-align: right; vertical-align: top">
+                <p><strong>R.S.W. de Graaf</strong><br>Namens de verhuurder</p>
+                <img src="data:image/png;base64,' . $base64_image_handtekening . '" alt="Signature" style="max-width: 250px; height: auto;">
+            </td>
+        </tr>
+    </table>
+</div>
+        
+        <div class="footer">
+            <p>&copy; Vereniging Scouting Tecumseh, Haren (GN) All rights reserved</p>
+        </div>
+        
+        </body>
+        </html>';
+        
         $dompdf->loadHtml($html);
+        
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
+        
         // Render the HTML as PDF
         $dompdf->render();
+        
         // Output the generated PDF to Browser
-        $dompdf->stream('verhuur overeenkomst -' . esc_html($rental->name) . '.pdf');
+        $dompdf->stream('verhuur-overeenkomst-' . esc_html($rental->name) . '.pdf');
     }
 }
