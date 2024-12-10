@@ -210,7 +210,7 @@ function handle_scouting_rentals_actions() {
         
         <p>De ondergetekenden:</p>
         <p>1. Vereniging Scouting Tecumseh, gevestigd te Haren (Gn.) Kamer Van Koophandel nr. 54395356 p/a Berkenlaan 30 9751 GR Haren (Gn.), hierna te noemen "Tecumseh".</p>
-        <p>2. Naam: <strong>' . esc_html($rental->name) . '</strong> met de e-mail: <strong>' . esc_html($rental->email) . '</strong></p>
+        <p>2. <strong>' . esc_html($rental->name) . '</strong> met de e-mail: <strong>' . esc_html($rental->email) . '</strong></p>
         
         <h2>Verklaren:</h2>
         <p>Tecumseh verhuurt aan de onder 2 genoemde organisatie, hierna te noemen "de huurder", haar hoofdgebouw (aangeduid als "groepsgebouw") op perceel Rollematen 2 te Haren gelegen;<p>
