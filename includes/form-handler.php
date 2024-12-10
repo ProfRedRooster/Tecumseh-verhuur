@@ -39,16 +39,16 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
     }
     // Adjust price based on the number of people
     switch ($number_of_people) {
-        case 'onder-25':
+        case '1 tot 25':
             $price *= $varonder25;
             break;
-        case '25-50':
+        case '25 tot 50':
             $price *= $var25tot50;
             break;
-        case '50-100':
+        case '50 tot 100':
             $price *= $var50tot100;
             break;
-        case '100-plus':
+        case '100 plus':
             $price *= $var100plus;
             break;
     }
