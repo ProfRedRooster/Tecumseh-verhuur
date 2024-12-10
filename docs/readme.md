@@ -43,5 +43,6 @@ Het verhuurformulier
 Het paneel voor aankomende reserveringen voor "stam" leden
 ![Afbeelding 4](https://verhuur.rohandg.nl/4.png)
 
-Een voorbeeld van een gedeelte van de verhuur overeenkomst (het word automatisch ingevult met alle gegevens) Dit word via dompdf gedaan door de html om te zetten
+Een voorbeeld van een gedeelte van de verhuur overeenkomst (het word automatisch ingevult met alle gegevens) Dit word via dompdf gedaan via html en css
 ![Afbeelding 5](https://verhuur.rohandg.nl/5.png)
+![Afbeelding 6](https://verhuur.rohandg.nl/6.png)
