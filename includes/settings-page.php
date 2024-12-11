@@ -26,6 +26,10 @@ function scouting_rentals_settings_init() {
     register_setting('scouting_rentals_settings_group', '25tot50');
     register_setting('scouting_rentals_settings_group', '50tot100');
     register_setting('scouting_rentals_settings_group', '100plus');
+    register_setting('scouting_rentals_settings_group', 'telefoonnummer');
+    register_setting('scouting_rentals_settings_group', 'email');
+    register_setting('scouting_rentals_settings_group', 'logo');
+    register_setting('scouting_rentals_settings_group', 'handtekening');
 }
 
 // Create settings page
@@ -87,6 +91,25 @@ function scouting_rentals_settings_page() {
                     <th scope="row">Factor voor meer dan 100 mensen</th>
                     <td><input type="text" name="100plus" value="<?php echo esc_attr(get_option('100plus', '1')); ?>" /></td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Telefoonnummer</th>
+                    <td><input type="text" name="telefoonnummer" value="<?php echo esc_attr(get_option('telefoonnummer', '')); ?>" /></td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Email</th>
+                    <td><input type="email" name="email" value="<?php echo esc_attr(get_option('email', '')); ?>" /></td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Logo link</th>
+                    <td><input type="text" name="logo" value="<?php echo esc_attr(get_option('logo', '')); ?>" /></td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Handtekening link</th>
+                    <td><input type="text" name="handtekening" value="<?php echo esc_attr(get_option('handtekening', '')); ?>" /></td>
+                </tr>                
             </table>
             
             <?php submit_button(); ?>

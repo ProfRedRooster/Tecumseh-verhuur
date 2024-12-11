@@ -131,28 +131,95 @@ function handle_scouting_rentals_actions() {
     }
     if (isset($_GET['factuur'])) {
         $id = intval($_GET['factuur']);
+        $borg = get_option('borg', 200);
+        
+        $image_path_logo = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/logo-2-3.png';
+        $image_data_logo = file_get_contents($image_path_logo);
+        $base64_image_logo = base64_encode($image_data_logo);
+        $email = get_option('email');
+        $telefoonnummer = get_option('telefoonnummer');
         $rental = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}scouting_rentals WHERE id = $id");
         $dompdf = new Dompdf\Dompdf();
-        $html = '<h1>Factuur</h1>';
+        $html = '
+        <!DOCTYPE html>
+        <html lang="nl">
+        <head>
+            <meta charset="UTF-8">
+            <title>Factuur</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 10px; background: white; }
+        .header, .footer { text-align: center; }
+        .content { margin: 10px; }
+        .content table { width: 100%; border-collapse: collapse; }
+        .content table, .content th, .content td { border: 1px solid white; }
+        .content th, .content td { padding: 10px; text-align: left; }
+        .header img { max-width: 150px; }
+        .content .description { width: 70%; }
+        .content .price { width: 30%; text-align: right; }
+                h1 {
+            color: #004080;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #004080;
+            border-bottom: 2px solid #004080;
+            padding-bottom: 5px;
+            margin-top: 10px;
+        }
+    </style>
+        </head>
+        <body>
+            <div class="header">
+                <img src="data:image/png;base64,' . $base64_image_logo . '" alt="Signature">
+                <h1>Scoutingvereniging Tecumseh</h1>
+                <p>Rollematen 2<br>9752 XT Haren<br>Tel. verhuur: ' . esc_html($telefoonnummer) . '<br>E-mail verhuur: ' . esc_html($email) . '<br>Website: www.scoutingtecumseh.nl</p>
+            </div>
+            <div class="content">
+                <h2>Factuur</h2>
+                <p>Ter name van: ' . esc_html($rental->name) . '<br>E-mail: ' . esc_html($rental->email) . '<br>Factuurdatum: ' . date("d-m-Y") . '<br>Factuurnummer: ' . esc_html($rental->id) . '</p>
+        <table>
+            <tr>
+                <th class="description">Omschrijving</th>
+                <th class="price">Prijs</th>
+            </tr>
+            <tr>
+                <td class="description">' . esc_html($rental->service) . '  tussen de <strong>' . esc_html($rental->start_period) . '</strong> van <strong>' . esc_html($rental->start_date) . '</strong>, tot de <strong>' . esc_html($rental->end_period) . '</strong> van <strong>' . esc_html($rental->end_date) . '</strong></td>
+                <td class="price">€ ' . esc_html($rental->total_price) . '</td>
+            </tr>
+            <tr>
+                <td class="description">borg (wordt na afloop teruggestort)</td>
+                <td class="price">€ ' . esc_html($borg) . '</td>
+            </tr>
+            <tr>
+                <td class="description" style="text-align: right;">Totaal</td>
+                <td class="price">€ ' . esc_html($rental->total_price + $borg) . '</td>
+            </tr>
+        </table>
+                <p>Gelieve het totaalbedrag binnen 21 dagen over te maken op: <strong>NL71 ABNA 0571 1612 78</strong> onder vermelding van het factuurnummer.<br>Het borgbedrag wordt binnen 14 dagen teruggeboekt als er geen schade is en de huurder aan alle in de overeenkomst gestelde voorwaarden heeft voldaan.</p>
+            </div>
+            <div class="footer">
+            <p>&copy; Vereniging Scouting Tecumseh, Haren (GN) All rights reserved</p>
+            </div>
+        </body>
+        </html>';
         $dompdf->loadHtml($html);
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'landscape');
-        // Render the HTML as PDF
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        // Output the generated PDF to Browser
-        $dompdf->stream('factuur.pdf');
+        $dompdf->stream('factuur - ' . esc_html($rental->name) . '.pdf');
+    
     }
     if (isset($_GET['contract'])) {
         $id = intval($_GET['contract']);
-        $borg = get_option('borg', 201);
+        $borg = get_option('borg', 200);
         $rental = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}scouting_rentals WHERE id = $id");
         $dompdf = new Dompdf\Dompdf();
         
-        $image_path_handtekening = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/rohanhandtekening-e1733859959740.png';
+        $image_path_handtekening = get_option('handtekening');
         $image_data_handtekening = file_get_contents($image_path_handtekening);
         $base64_image_handtekening = base64_encode($image_data_handtekening);
 
-        $image_path_logo = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/logo-2-3.png';
+        $image_path_logo = get_option('logo');
         $image_data_logo = file_get_contents($image_path_logo);
         $base64_image_logo = base64_encode($image_data_logo);
   
@@ -166,7 +233,7 @@ function handle_scouting_rentals_actions() {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            padding: 20px;
+            padding: 10px;
             background: white;
         }
         .header {
@@ -224,7 +291,7 @@ function handle_scouting_rentals_actions() {
         <h2>Artikel 1: de huurprijs</h2>
         <p>€ <strong>' . esc_html($rental->total_price + $borg) . '</strong> ,-</p>
         <p>De prijs is inclusief BTW en het borgbedrag</p>
-        <p>De huurprijs moet voor de huurperiode op de rekening van Tecumseh gestort worden op rekening: NL71 ABNA 0571 1612 78 ter name van: Vereniging Scouting Tecumseh te Haren onder vermelding van: het factuurnummer</p>
+        <p>De huurprijs moet voor de huurperiode op de rekening van Tecumseh gestort worden op rekening: NL71 ABNA 0571 1612 78 ter name van: Vereniging Scouting Tecumseh te Haren onder vermelding van: het factuurnummer (' . esc_html($rental->id) . ')</p>
         
         <h2>Artikel 2: aantal personen</h2>
         <p> De huurder moet opgeven met hoeveel personen hij maximaal komt. Dit maximale aantal mag zonder overleg met Tecumseh niet overschreden worden. Aantal personen door huurder opgegeven: <strong>' . esc_html($rental->number_of_people) . '</strong>  Bij een evenement met meer dan 100 personen dient formeel een evenementen vergunning te worden aangevraagd bij de gemeente Groningen (meerschap) (doorlooptijd ca 8 weken).</p>
@@ -319,6 +386,6 @@ function handle_scouting_rentals_actions() {
         $dompdf->render();
         
         // Output the generated PDF to Browser
-        $dompdf->stream('verhuur-overeenkomst-' . esc_html($rental->name) . '.pdf');
+        $dompdf->stream('verhuur-vereenkomst - ' . esc_html($rental->name) . '.pdf');
     }
 }
