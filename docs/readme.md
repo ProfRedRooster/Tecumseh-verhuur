@@ -20,7 +20,6 @@ Functies waar ik aan werk:
 - Zorgen dat er een e-mail wordt verzonden als er een resevering is geplaatst
 - vertaal sommige code en de functies naar het Nederlands
 - verbeter de aankomende reserveringen met extra details.
-- zorg dat er een factuur gegenereert word
 
 ---
 Lijst van shortcodes:
@@ -46,3 +45,5 @@ Het paneel voor aankomende reserveringen voor "stam" leden
 Een voorbeeld van een gedeelte van de verhuur overeenkomst (het word automatisch ingevult met alle gegevens) Dit word via dompdf gedaan via html en css
 ![Afbeelding 5](https://verhuur.rohandg.nl/5.png)
 ![Afbeelding 6](https://verhuur.rohandg.nl/6.png)
+Een voorbeeld van een gegenereerde factuur
+![Afbeelding 7](https://verhuur.rohandg.nl/7.png)
