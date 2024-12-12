@@ -1,4 +1,10 @@
 <?php
+// Enqueue admin styles
+function scouting_rentals_enqueue_admin_styles() {
+    wp_enqueue_style('scouting-rentals-admin-style', plugin_dir_url(__FILE__) . 'css/admin-style.css');
+}
+add_action('admin_enqueue_scripts', 'scouting_rentals_enqueue_admin_styles');
+
 // Admin settings page to edit prices
 function scouting_rentals_register_settings() {
     add_menu_page(
