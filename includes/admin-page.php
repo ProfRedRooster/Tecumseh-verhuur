@@ -391,6 +391,6 @@ function handle_scouting_rentals_actions() {
         $dompdf->render();
         
         // Output the generated PDF to Browser
-        $dompdf->stream('verhuur-vereenkomst - ' . esc_html($rental->name) . '.pdf');
+        $dompdf->stream('verhuur-overeenkomst - ' . esc_html($rental->name) . '.pdf');
     }
 }
