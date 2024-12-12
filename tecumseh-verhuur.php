@@ -45,6 +45,15 @@ function scouting_rentals_install() {
         $message_column,
         PRIMARY KEY  (id)
     ) $charset_collate;";
+    
+    $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+    $charset_collate = $wpdb->get_charset_collate();
+    
+    $sql = "CREATE TABLE $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        disabled_date date NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);

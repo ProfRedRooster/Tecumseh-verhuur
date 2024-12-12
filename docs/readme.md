@@ -3,23 +3,16 @@ Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
 Dit project maak ik voor HPG (Honours Programma Gymnasia)
 
 Huidige functies:
-- Het formulier
-- De prijscalculator is serverzijde
-- Het beheerderspaneel 
-- Het instellingenpaneel
-- Aankomende reserveringen
-- De ochtend/middag functie in de database + formulier + prijscalculatie :)
-- de scoutkorting
-- de houttoevoeging
-- je kunt de beschikbaarheid zien (in het formulier)
-- de beschikbaarheidsfunctie heeft meer info aan de "intranet" kant van de site
-- het automatisch invullen van het verhuurders overeenkomst
-
+- Een verhuurformulier met dynamische prijsweergave (scouting_rentals_form).
+- Shortcodes voor het weergeven van aankomende reserveringen, zowel openbaar als met extra details voor leden.
+- Een reserveringscontrolepaneel om alle gegevens eenvoudig aan te passen.
+- Een prijscontrolepaneel om prijzen te beheren.
+- Automatische generatie van verhuurovereenkomsten en facturen met ingevulde gegevens via dompdf.
 Functies waar ik aan werk:
-- Verbeter de datumkiezer zodat je de beschikbaarheid in de ochtend/avond kunt zien
-- Zorgen dat er een e-mail wordt verzonden als er een resevering is geplaatst
-- vertaal sommige code en de functies naar het Nederlands
-- verbeter de aankomende reserveringen met extra details.
+- Het verbeteren van de datumkiezer met beschikbaarheid in de ochtend/avond.
+- Het verzenden van e-mails bij nieuwe reserveringen.
+- Het vertalen van code en functies naar het Nederlands.
+- Het toevoegen van extra details aan aankomende reserveringen.
 
 ---
 Lijst van shortcodes:

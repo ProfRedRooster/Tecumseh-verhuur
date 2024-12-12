@@ -150,14 +150,23 @@ add_shortcode('scouting_rentals_form', 'scouting_rentals_form_shortcode');
 function get_reserved_dates() {
     global $wpdb;
     $table_name = $wpdb->prefix . "scouting_rentals";
+    $disabled_table = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+
+    // Get approved reservations
     $query = $wpdb->prepare("SELECT start_date, end_date FROM $table_name WHERE status = %s", 'approved');
     $results = $wpdb->get_results($query);
-    
+
+    // Get disabled dates
+    $disabled_dates = $wpdb->get_col("SELECT disabled_date FROM $disabled_table");
+
     if ($wpdb->last_error) {
-        return json_encode([]);
+        echo json_encode([]);
+        wp_die();
     }
 
     $reserved_dates = [];
+
+    // Add reserved dates from approved reservations
     foreach ($results as $row) {
         $current_date = strtotime($row->start_date);
         $end_date = strtotime($row->end_date);
@@ -166,7 +175,16 @@ function get_reserved_dates() {
             $current_date = strtotime('+1 day', $current_date);
         }
     }
-    echo json_encode($reserved_dates);
+
+    // Add disabled dates
+    foreach ($disabled_dates as $date) {
+        $reserved_dates[] = $date;
+    }
+
+    // Remove duplicates
+    $reserved_dates = array_unique($reserved_dates);
+
+    echo json_encode(array_values($reserved_dates));
     wp_die(); // Required to terminate properly
 }
 add_action('wp_ajax_get_reserved_dates', 'get_reserved_dates');
@@ -254,61 +272,101 @@ function scouting_upcoming_reservations() {
         $start_date = esc_html($row->start_date);
         $end_date = esc_html($row->end_date);
         $service = isset($row->service) ? esc_html($row->service) : 'N/A';
-        $start_period = isset($row->start_period) ? esc_html($row->start_period) : 'N/A'; // Added start_period
-        $end_period = isset($row->end_period) ? esc_html($row->end_period) : 'N/A'; // Added end_period
+        $start_period = isset($row->start_period) ? esc_html($row->start_period) : 'N/A'; 
+        $end_period = isset($row->end_period) ? esc_html($row->end_period) : 'N/A'; 
         echo "<li>$name - $start_date $start_period to $end_date $end_period ($service)</li>";
     }
     echo '</ul>';
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_disabled_date'])) {
+        $disabled_date = sanitize_text_field($_POST['disabled_date']);
+        $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+        $wpdb->insert($table_name, ['disabled_date' => $disabled_date]);
+    }
+    
+    // Handle form submission to remove disabled dates
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_disabled_date'])) {
+        $reenable_date = sanitize_text_field($_POST['reenable_date']);
+        $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+        $wpdb->delete($table_name, ['disabled_date' => $reenable_date]);
+    }
+    
+    $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+    $disabled_dates = $wpdb->get_results("SELECT * FROM $table_name");
     ?>
-    <div id="scouting-rentals-calendar"></div>
-    <script>
-    var reservedDates = [];
-    var selectedDates = [];
+    
+    <h2>Geblockeerde verhuur datums:</h2>
+<!-- Form to add disabled date -->
+<form method="post">
+    <label for="disabled_date">Selecteer datum om te blokkeren:</label>
+    <input type="text" id="disable_datepicker" name="disabled_date" required>
+    <input type="submit" name="add_disabled_date" value="Blokkeer datum">
+</form>
 
-    // Fetch the reserved dates from the server
+<!-- Form to re-enable date -->
+<form method="post">
+    <label for="reenable_date">Selecteer datum om te deblokkeren:</label>
+    <input type="text" id="reenable_datepicker" name="reenable_date" required>
+    <input type="submit" name="remove_disabled_date" value="Deblokkeer datum">
+</form>
+
+<script>
+    var reservedDates = [];
+    var disabledDates = [];
+
+    // Fetch reserved dates from the server
     fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
         .then(response => response.json())
         .then(data => {
             reservedDates = data;
-            initializeCalendar(); // Initialize the calendar after the data is loaded
+            initializeDatepickers();
         });
 
-    function initializeCalendar() {
-        var today = new Date().toISOString().split('T')[0]; // Get today's date
+    // Fetch disabled dates from the server
+    fetch("<?php echo admin_url('admin-ajax.php?action=get_disabled_dates'); ?>")
+        .then(response => response.json())
+        .then(data => {
+            disabledDates = data;
+            initializeDatepickers();
+        });
 
-        $("#scouting-rentals-calendar").datepicker({
+    function initializeDatepickers() {
+        // Initialize datepicker for disabling dates
+        $("#disable_datepicker").datepicker({
             dateFormat: "yy-mm-dd",
-            beforeShowDay: function (date) {
+            beforeShowDay: function(date) {
                 var dateString = $.datepicker.formatDate('yy-mm-dd', date);
-
-                // Disable reserved dates
-                if (reservedDates.indexOf(dateString) !== -1) {
-                    return [false, 'reserved-date', 'Reserved']; // Return false to disable and apply CSS class
+                // Exclude already disabled or reserved dates
+                if (reservedDates.indexOf(dateString) !== -1 || disabledDates.indexOf(dateString) !== -1) {
+                    return [false];
                 }
+                return [true];
+            }
+        });
 
-                // Highlight selected dates
-                if (selectedDates.indexOf(dateString) !== -1) {
-                    return [true, 'selected-date', 'Selected'];
+        // Initialize datepicker for re-enabling dates
+        $("#reenable_datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function(date) {
+                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+                // Only allow selection of disabled dates
+                if (disabledDates.indexOf(dateString) !== -1) {
+                    return [true];
                 }
-
-                // Available dates
-                return [true, 'available-date', 'Available'];
-            },
-            minDate: today,
-            onSelect: function (dateText) {
-                var index = selectedDates.indexOf(dateText);
-                if (index === -1) {
-                    selectedDates.push(dateText); // Add to selected dates
-                } else {
-                    selectedDates.splice(index, 1); // Remove from selected dates
-                }
-                $(this).datepicker('refresh'); // Refresh the datepicker to apply the new styles
+                return [false];
             }
         });
     }
-    </script>
+</script>
     <?php
     return ob_get_clean();
 }
 add_shortcode('scouting_upcoming_reservations', 'scouting_upcoming_reservations');
+add_action('wp_ajax_get_disabled_dates', 'get_disabled_dates');
+add_action('wp_ajax_nopriv_get_disabled_dates', 'get_disabled_dates');
+function get_disabled_dates() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
+    $results = $wpdb->get_col("SELECT disabled_date FROM $table_name");
+    wp_send_json($results);
+}
 ?>

@@ -68,8 +68,30 @@ function calculate_total_price($number_of_people, $service, $wood_included, $rel
 function is_reservation_available($start_date, $end_date, $start_period, $end_period) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'scouting_rentals';
+    $disabled_table = $wpdb->prefix . 'scouting_rentals_disabled_dates';
 
-    // Query to check for overlapping dates and day parts
+    // Retrieve disabled dates
+    $disabled_dates = $wpdb->get_col("SELECT disabled_date FROM $disabled_table");
+
+    // Create an array of dates within the requested period
+    $period = new DatePeriod(
+        new DateTime($start_date),
+        new DateInterval('P1D'),
+        (new DateTime($end_date))->modify('+1 day')
+    );
+
+    $requested_dates = [];
+    foreach ($period as $date) {
+        $requested_dates[] = $date->format('Y-m-d');
+    }
+
+    // Check if any of the requested dates are disabled
+    if (array_intersect($requested_dates, $disabled_dates)) {
+        // Reservation overlaps with disabled dates
+        return false;
+    }
+
+    // Existing availability check for overlapping reservations
     $query = $wpdb->prepare(
         "SELECT COUNT(*) FROM $table_name 
         WHERE NOT (end_date < %s OR start_date > %s) 
@@ -83,7 +105,7 @@ function is_reservation_available($start_date, $end_date, $start_period, $end_pe
     );
     $count = $wpdb->get_var($query);
 
-    // If count is 0, no overlapping reservations with the same day part, return true
+    // Return true if no overlapping reservations, false otherwise
     return ($count == 0);
 }
 
