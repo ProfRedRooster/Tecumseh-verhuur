@@ -9,6 +9,7 @@ Huidige functies:
 - Een reserveringscontrolepaneel om alle gegevens eenvoudig aan te passen.
 - Een prijscontrolepaneel om prijzen te beheren.
 - Automatische generatie van verhuurovereenkomsten en facturen met ingevulde gegevens via dompdf.
+  
 Functies waar ik aan werk:
 - Het verbeteren van de datumkiezer met beschikbaarheid in de ochtend/avond.
 - Het verzenden van e-mails bij nieuwe reserveringen.
