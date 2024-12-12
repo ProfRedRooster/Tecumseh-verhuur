@@ -3,11 +3,12 @@
 function scouting_rentals_register_settings() {
     add_menu_page(
         'Scouting Rentals Settings',
-        'Rental Settings',
+        'Instellingen',
         'manage_options',
         'scouting_rentals_settings',
         'scouting_rentals_settings_page',
-        'dashicons-admin-settings'
+        'dashicons-admin-settings',
+        3
     );
     add_action('admin_init', 'scouting_rentals_settings_init');
 }

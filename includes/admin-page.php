@@ -8,11 +8,12 @@ add_action('admin_menu', 'scouting_rentals_admin_menu');
 function scouting_rentals_admin_menu() {
     add_menu_page(
         'Scouting Rentals', 
-        'Rentals', 
+        'Aanvragen', 
         'manage_options', 
         'scouting_rentals', 
         'scouting_rentals_admin_page', 
-        'dashicons-admin-generic'
+        'dashicons-excerpt-view',
+        2 // bovenaan de pagina :))
     );
 }
 
