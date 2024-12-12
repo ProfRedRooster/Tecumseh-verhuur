@@ -13,7 +13,7 @@ function scouting_rentals_register_settings() {
         'manage_options',
         'scouting_rentals_settings',
         'scouting_rentals_settings_page',
-        'dashicons-admin-settings',
+        'dashicons-admin-customizer',
         3
     );
     add_action('admin_init', 'scouting_rentals_settings_init');

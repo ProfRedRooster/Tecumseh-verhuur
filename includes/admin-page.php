@@ -21,6 +21,9 @@ function scouting_rentals_admin_page() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'scouting_rentals';
 
+    // Fetch reservations ordered by start_date in descending order
+    $reservations = $wpdb->get_results("SELECT * FROM $table_name ORDER BY start_date DESC");
+
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_rentals'])) {
         foreach ($_POST['id'] as $index => $id) {

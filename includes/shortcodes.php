@@ -92,7 +92,26 @@ function scouting_rentals_form_shortcode() {
     function initializeDatePicker() {
         var today = new Date().toISOString().split('T')[0]; // Get today's date
 
-        $("#start_date, #end_date").datepicker({
+        $("#start_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            beforeShowDay: function (date) {
+                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+
+                // Disable reserved dates
+                if (reservedDates.indexOf(dateString) !== -1) {
+                    return [false, 'reserved-date', 'Reserved']; // Return false to disable
+                }
+
+                // Available dates
+                return [true, 'available-date', 'Available'];
+            },
+            minDate: today,
+            onSelect: function(selectedDate) {
+                $("#end_date").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#end_date").datepicker({
             dateFormat: "yy-mm-dd",
             beforeShowDay: function (date) {
                 var dateString = $.datepicker.formatDate('yy-mm-dd', date);
@@ -108,6 +127,7 @@ function scouting_rentals_form_shortcode() {
             minDate: today
         });
     }
+
 function calculatePrice() {
     var startDate = document.getElementById('start_date').value;
     var endDate = document.getElementById('end_date').value;
