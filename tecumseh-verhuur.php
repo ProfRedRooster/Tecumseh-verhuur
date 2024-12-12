@@ -8,7 +8,7 @@
  * Plugin Name:       Tecumseh Verhuur
  * Plugin URI:        https://github.com/ProfRedRooster/Tecumseh-verhuur/
  * Description:       Administratie verhuur en verhuur formulieren
- * Version:           0.0.6
+ * Version:           0.1.0
  * Author:            Rohan de Graaf
  * Author URI:        https://rohandg.nl/
  * Text Domain:       tecumseh_beheer
@@ -45,7 +45,7 @@ function scouting_rentals_install() {
         $message_column,
         PRIMARY KEY  (id)
     ) $charset_collate;";
-    
+
     $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
     $charset_collate = $wpdb->get_charset_collate();
     
