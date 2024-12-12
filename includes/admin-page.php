@@ -133,7 +133,7 @@ function handle_scouting_rentals_actions() {
         $id = intval($_GET['factuur']);
         $borg = get_option('borg', 200);
         
-        $image_path_logo = 'https://tecumseh-wp.rohandg.nl/wp-content/uploads/2024/12/logo-2-3.png';
+        $image_path_logo = get_option('logo');
         $image_data_logo = file_get_contents($image_path_logo);
         $base64_image_logo = base64_encode($image_data_logo);
         $email = get_option('email');
