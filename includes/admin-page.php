@@ -132,6 +132,7 @@ function handle_scouting_rentals_actions() {
     if (isset($_GET['factuur'])) {
         $id = intval($_GET['factuur']);
         $borg = get_option('borg', 200);
+        $wood_price = get_option('wood_price');
         
         $image_path_logo = get_option('logo');
         $image_data_logo = file_get_contents($image_path_logo);
@@ -178,13 +179,13 @@ function handle_scouting_rentals_actions() {
             <div class="content">
                 <h2>Factuur</h2>
                 <p>Ter name van: ' . esc_html($rental->name) . '<br>E-mail: ' . esc_html($rental->email) . '<br>Factuurdatum: ' . date("d-m-Y") . '<br>Factuurnummer: ' . esc_html($rental->id) . '</p>
-        <table>
+         <table>
             <tr>
                 <th class="description">Omschrijving</th>
                 <th class="price">Prijs</th>
             </tr>
             <tr>
-                <td class="description">' . esc_html($rental->service) . '  tussen de <strong>' . esc_html($rental->start_period) . '</strong> van <strong>' . esc_html($rental->start_date) . '</strong>, tot de <strong>' . esc_html($rental->end_period) . '</strong> van <strong>' . esc_html($rental->end_date) . '</strong></td>
+                <td class="description">' . esc_html($rental->service) . ' tussen de <strong>' . esc_html($rental->start_period) . '</strong> van <strong>' . esc_html($rental->start_date) . '</strong>, tot de <strong>' . esc_html($rental->end_period) . '</strong> van <strong>' . esc_html($rental->end_date) . '</strong>' . ($rental->wood_included === 'yes' ? ' inclusief hout (€ ' . esc_html($wood_price) .')' : '') . '</td>
                 <td class="price">€ ' . esc_html($rental->total_price) . '</td>
             </tr>
             <tr>
@@ -193,7 +194,7 @@ function handle_scouting_rentals_actions() {
             </tr>
             <tr>
                 <td class="description" style="text-align: right;">Totaal</td>
-                <td class="price">€ ' . esc_html($rental->total_price + $borg) . '</td>
+                <td class="price">€ ' . esc_html($total_price + $borg) . '</td>
             </tr>
         </table>
                 <p>Gelieve het totaalbedrag binnen 21 dagen over te maken op: <strong>NL71 ABNA 0571 1612 78</strong> onder vermelding van het factuurnummer.<br>Het borgbedrag wordt binnen 14 dagen teruggeboekt als er geen schade is en de huurder aan alle in de overeenkomst gestelde voorwaarden heeft voldaan.</p>
