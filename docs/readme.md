@@ -3,6 +3,7 @@ Dit is de verhuurplugin voor de Tecumseh Wordpress-site.
 Dit project maak ik voor HPG (Honours Programma Gymnasia)
 
 Huidige functies:
+
 - Een verhuurformulier met dynamische prijsweergave (scouting_rentals_form).
 - Shortcodes voor het weergeven van aankomende reserveringen, zowel openbaar als met extra details voor leden.
 - Een reserveringscontrolepaneel om alle gegevens eenvoudig aan te passen.
@@ -16,6 +17,7 @@ Functies waar ik aan werk:
 
 ---
 Lijst van shortcodes:
+
 - `scouting_rentals_form`: Shortcode voor het verhuurformulier met dynamische prijsweergave.
 - `scouting_upcoming_reservations_public`: Shortcode voor het weergeven van aankomende reserveringen.
 - `scouting_upcoming_reservations`: Shortcode voor het weergeven van aankomende reserveringen met extra details.
@@ -23,15 +25,19 @@ Lijst van shortcodes:
 Dit is "work in progress"
 
 ---
+
 Het reserveringscontrolepaneel (Je kan alle gegevens makkelijk aanpassen)
 ![Afbeelding 1](https://verhuur.rohandg.nl/1.png)
 ---
+
 Het prijscontrolepaneel
 ![Afbeelding 2](https://verhuur.rohandg.nl/2.png)
 ---
+
 Het verhuurformulier
 ![Afbeelding 3](https://verhuur.rohandg.nl/3.png)
 ---
+
 Het paneel voor aankomende reserveringen voor "stam" leden
 ![Afbeelding 4](https://verhuur.rohandg.nl/4.png)
 
