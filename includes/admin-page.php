@@ -198,7 +198,7 @@ function handle_scouting_rentals_actions() {
             </tr>
             <tr>
                 <td class="description" style="text-align: right;">Totaal</td>
-                <td class="price">€ ' . esc_html($total_price + $borg) . '</td>
+                <td class="price">€ ' . esc_html($rental->total_price + $borg) . '</td>
             </tr>
         </table>
                 <p>Gelieve het totaalbedrag binnen 21 dagen over te maken op: <strong>NL71 ABNA 0571 1612 78</strong> onder vermelding van het factuurnummer.<br>Het borgbedrag wordt binnen 14 dagen teruggeboekt als er geen schade is en de huurder aan alle in de overeenkomst gestelde voorwaarden heeft voldaan.</p>
