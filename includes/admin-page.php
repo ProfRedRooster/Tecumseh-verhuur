@@ -114,11 +114,14 @@ function scouting_rentals_admin_page() {
         echo '<option value="field_toilets_kitchen_lokalen"' . ($service == 'field_toilets_kitchen_lokalen' ? ' selected' : '') . '>Field + Toilets + Kitchen + Lokalen</option>';
         echo '</select></div>';
         echo '</div>';
+        echo '<div class="form-row">';
         echo '<div class="form-group"><label>Hout er bij?</label>';
         echo '<select name="wood_included[]">';
         echo '<option value="yes"' . ($wood_included == 'yes' ? ' selected' : '') . '>Yes</option>';
         echo '<option value="no"' . ($wood_included == 'no' ? ' selected' : '') . '>No</option>';
         echo '</select></div>';
+        echo '<div class="form-group"><label>Prijs</label><input type="number" step="0.01" name="total_price[]" value="' . $total_price . '"></div>';
+        echo '</div>';
         echo '<div class="form-group"><label>Bericht</label><input type="text" name="message[]" value="' . $message . '"></div>';
         echo '<div class="form-group"><label>Status</label><input type="text" name="status[]" value="' . $status . '"></div>';
         echo '<div class="actions"><a href="?page=scouting_rentals&approve=' . intval($row->id) . '">Approve</a> | ';
