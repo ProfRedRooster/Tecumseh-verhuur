@@ -8,7 +8,7 @@
  * Plugin Name:       Tecumseh Verhuur
  * Plugin URI:        https://github.com/ProfRedRooster/Tecumseh-verhuur/
  * Description:       Administratie verhuur en verhuur formulieren
- * Version:           0.1.1
+ * Version:           0.2.0
  * Author:            Rohan de Graaf
  * Author URI:        https://rohandg.nl/
  * Text Domain:       tecumseh_beheer
@@ -49,11 +49,12 @@ function scouting_rentals_install() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql1);
 
-    // Create the second table
+    // Create the second table for disabling dates or periods
     $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
     $sql2 = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         disabled_date date NOT NULL,
+        disabled_period enum('ochtend','avond','both') NOT NULL DEFAULT 'both',
         PRIMARY KEY  (id)
     ) $charset_collate;";
     dbDelta($sql2);

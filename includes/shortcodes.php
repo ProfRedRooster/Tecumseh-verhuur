@@ -44,7 +44,12 @@ function scouting_rentals_form_shortcode() {
             <option value="ochtend">Ochtend tot middag</option>
             <option value="avond">Middag tot avond</option>
         </select><br>
-
+        <div class="legend">
+            <div class="legend-item"><span class="legend-color available"></span><span>Beschikbaar</span></div>
+            <div class="legend-item"><span class="legend-color reserved"></span><span>Hele dag gereserveerd</span></div>
+            <div class="legend-item"><span class="legend-color morning"></span><span>Ochtend gereserveerd</span></div>
+            <div class="legend-item"><span class="legend-color evening"></span><span>Avond gereserveerd</span></div>
+        </div>
         <!-- Service Selection -->
         <label for="service">Waar wilt u gebruik van maken:</label>
         <select id="service" name="service" onchange="calculatePrice()">
@@ -79,7 +84,7 @@ function scouting_rentals_form_shortcode() {
     </form>
 
     <script>
-    var reservedDates = [];
+    var reservedDates = {};
 
     // Fetch the reserved dates from the server
     fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
@@ -97,17 +102,43 @@ function scouting_rentals_form_shortcode() {
             beforeShowDay: function (date) {
                 var dateString = $.datepicker.formatDate('yy-mm-dd', date);
 
-                // Disable reserved dates
-                if (reservedDates.indexOf(dateString) !== -1) {
-                    return [false, 'reserved-date', 'Reserved']; // Return false to disable
+                // Determine reservation status
+                var info = reservedDates[dateString];
+                if (info === 'both') {
+                    return [false, 'reserved-date', 'Hele dag gereserveerd'];
+                } else if (info === 'morning') {
+                    return [true, 'morning-reserved', 'Ochtend gereserveerd'];
+                } else if (info === 'evening') {
+                    return [true, 'evening-reserved', 'Avond gereserveerd'];
                 }
-
-                // Available dates
-                return [true, 'available-date', 'Available'];
+                return [true, 'available-date', 'Beschikbaar'];
             },
             minDate: today,
             onSelect: function(selectedDate) {
                 $("#end_date").datepicker("option", "minDate", selectedDate);
+                updatePeriodOptions('start_period', selectedDate);
+                // if only morning is open (evening reserved), restrict to single-day booking
+                var info = reservedDates[selectedDate] || '';
+                if (info === 'evening') {
+                    $("#end_date").datepicker("option", { maxDate: selectedDate });
+                    $("#end_date").val(selectedDate);
+                } else {
+                    // allow booking up to next reservation date unless fully booked
+                    var futureDates = Object.keys(reservedDates).filter(function(d) { return d > selectedDate; }).sort();
+                    if (futureDates.length > 0) {
+                        var nextDateStr = futureDates[0];
+                        var nextInfo = reservedDates[nextDateStr] || '';
+                        var dt = new Date(nextDateStr);
+                        // if fully booked or morning-reserved, treat as full-day block
+                        if (nextInfo === 'both' || nextInfo === 'morning') {
+                            dt.setDate(dt.getDate() - 1);
+                        }
+                        // evening-reserved allows booking that morning period (dt stays on nextDate)
+                        $("#end_date").datepicker("option", "maxDate", dt);
+                    } else {
+                        $("#end_date").datepicker("option", "maxDate", null);
+                    }
+                }
             }
         });
 
@@ -116,15 +147,51 @@ function scouting_rentals_form_shortcode() {
             beforeShowDay: function (date) {
                 var dateString = $.datepicker.formatDate('yy-mm-dd', date);
 
-                // Disable reserved dates
-                if (reservedDates.indexOf(dateString) !== -1) {
-                    return [false, 'reserved-date', 'Reserved']; // Return false to disable
+                // Determine reservation status
+                var info = reservedDates[dateString];
+                if (info === 'both') {
+                    return [false, 'reserved-date', 'Hele dag gereserveerd'];
+                } else if (info === 'morning') {
+                    return [true, 'morning-reserved', 'Ochtend gereserveerd'];
+                } else if (info === 'evening') {
+                    return [true, 'evening-reserved', 'Avond gereserveerd'];
                 }
-
-                // Available dates
-                return [true, 'available-date', 'Available'];
+                return [true, 'available-date', 'Beschikbaar'];
             },
-            minDate: today
+            minDate: today,
+            onSelect: function(selectedDate) {
+                updatePeriodOptions('end_period', selectedDate);
+            }
+        });
+
+        // Utility to disable period options based on reservation status
+        function updatePeriodOptions(selectId, dateString) {
+            var info = reservedDates[dateString] || '';
+            var $sel = $('#' + selectId);
+            // enable all first
+            $sel.find('option').prop('disabled', false);
+            if (info === 'morning') {
+                // disable morning if already booked
+                $sel.find('option[value="ochtend"]').prop('disabled', true);
+                // always switch to evening when morning is unavailable
+                $sel.val('avond');
+            } else if (info === 'evening') {
+                // disable evening if already booked
+                $sel.find('option[value="avond"]').prop('disabled', true);
+                // always switch to morning when evening is unavailable
+                $sel.val('ochtend');
+            } else if (info === 'both') {
+                // fully booked -> disable all
+                $sel.find('option').prop('disabled', true);
+            }
+        }
+
+        // Attach update on date change to disable appropriate period options
+        $('#start_date').on('change', function() {
+            updatePeriodOptions('start_period', $(this).val());
+        });
+        $('#end_date').on('change', function() {
+            updatePeriodOptions('end_period', $(this).val());
         });
     }
 
@@ -173,7 +240,7 @@ function get_reserved_dates() {
     $disabled_table = $wpdb->prefix . 'scouting_rentals_disabled_dates';
 
     // Get approved reservations
-    $query = $wpdb->prepare("SELECT start_date, end_date FROM $table_name WHERE status = %s", 'approved');
+    $query = $wpdb->prepare("SELECT start_date, end_date, start_period, end_period FROM $table_name WHERE status = %s", 'approved');
     $results = $wpdb->get_results($query);
 
     // Get disabled dates
@@ -185,26 +252,58 @@ function get_reserved_dates() {
     }
 
     $reserved_dates = [];
-
     // Add reserved dates from approved reservations
     foreach ($results as $row) {
-        $current_date = strtotime($row->start_date);
-        $end_date = strtotime($row->end_date);
-        while ($current_date <= $end_date) {
-            $reserved_dates[] = date('Y-m-d', $current_date);
-            $current_date = strtotime('+1 day', $current_date);
+        $start = $row->start_date;
+        $end   = $row->end_date;
+        $start_period = $row->start_period;
+        $end_period   = $row->end_period;
+        $date = $start;
+        while ($date <= $end) {
+            if ($start === $end) {
+                // Single-day booking
+                if ($start_period === $end_period) {
+                    $info = $start_period === 'ochtend' ? 'morning' : 'evening';
+                } else {
+                    $info = 'both';
+                }
+            } else {
+                // Multi-day booking covers full days
+                $info = 'both';
+            }
+            // Merge if multiple bookings affect same day
+            if (isset($reserved_dates[$date]) && $reserved_dates[$date] !== $info) {
+                $reserved_dates[$date] = 'both';
+            } else {
+                $reserved_dates[$date] = $info;
+            }
+            $date = date('Y-m-d', strtotime('+1 day', strtotime($date)));
         }
     }
-
-    // Add disabled dates
-    foreach ($disabled_dates as $date) {
-        $reserved_dates[] = $date;
+    // Add disabled dates or periods
+    $disabled_rows = $wpdb->get_results("SELECT disabled_date, disabled_period FROM $disabled_table");
+    foreach ($disabled_rows as $row) {
+        $d = $row->disabled_date;
+        $period = $row->disabled_period;
+        if ($period === 'both') {
+            $reserved_dates[$d] = 'both';
+        } elseif ($period === 'ochtend') {
+            // mark morning reserved
+            if (isset($reserved_dates[$d]) && $reserved_dates[$d] === 'evening') {
+                $reserved_dates[$d] = 'both';
+            } else {
+                $reserved_dates[$d] = 'morning';
+            }
+        } elseif ($period === 'avond') {
+            // mark evening reserved
+            if (isset($reserved_dates[$d]) && $reserved_dates[$d] === 'morning') {
+                $reserved_dates[$d] = 'both';
+            } else {
+                $reserved_dates[$d] = 'evening';
+            }
+        }
     }
-
-    // Remove duplicates
-    $reserved_dates = array_unique($reserved_dates);
-
-    echo json_encode(array_values($reserved_dates));
+    echo json_encode($reserved_dates);
     wp_die(); // Required to terminate properly
 }
 add_action('wp_ajax_get_reserved_dates', 'get_reserved_dates');
@@ -237,7 +336,7 @@ function scouting_upcoming_reservations_public() {
        <div id="scouting-rentals-calendar"></div>
 
 <script>
-var reservedDates = [];
+var reservedDates = {};
 
 // Fetch the reserved dates from the server
 fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
@@ -255,13 +354,17 @@ fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
         beforeShowDay: function (date) {
             var dateString = $.datepicker.formatDate('yy-mm-dd', date);
 
-            // Disable reserved dates
-            if (reservedDates.indexOf(dateString) !== -1) {
-                return [false, 'reserved-date', 'Reserved']; // Return false to disable and apply CSS class
+            // Determine reservation status
+            var info = reservedDates[dateString];
+            if (info === 'both') {
+                return [false, 'reserved-date', 'Hele dag gereserveerd'];
+            } else if (info === 'morning') {
+                return [true, 'morning-reserved', 'Ochtend gereserveerd'];
+            } else if (info === 'evening') {
+                return [true, 'evening-reserved', 'Avond gereserveerd'];
             }
-
-            // Available dates
-            return [true, 'available-date', 'Available'];
+            // No reservation
+            return [true, 'available-date', 'Beschikbaar'];
         },
         minDate: today
     });
@@ -297,85 +400,101 @@ function scouting_upcoming_reservations() {
         echo "<li>$name - $start_date $start_period to $end_date $end_period ($service)</li>";
     }
     echo '</ul>';
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_disabled_date'])) {
-        $disabled_date = sanitize_text_field($_POST['disabled_date']);
-        $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
-        $wpdb->insert($table_name, ['disabled_date' => $disabled_date]);
-    }
     
-    // Handle form submission to remove disabled dates
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_disabled_date'])) {
-        $reenable_date = sanitize_text_field($_POST['reenable_date']);
-        $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
-        $wpdb->delete($table_name, ['disabled_date' => $reenable_date]);
+    // Handle partial-day block submissions
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_disabled_slot'])) {
+        $block_date   = sanitize_text_field($_POST['block_date']);
+        $block_period = sanitize_text_field($_POST['block_period']);
+        // Skip if already disabled
+        $exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->prefix}scouting_rentals_disabled_dates WHERE disabled_date = %s AND disabled_period = %s",
+                $block_date, $block_period
+            )
+        );
+        if (!$exists) {
+            // Only insert when no existing reservation covers this slot
+            if ( function_exists('is_reservation_available') && is_reservation_available($block_date, $block_date, $block_period, $block_period) ) {
+                $wpdb->insert(
+                    $wpdb->prefix . 'scouting_rentals_disabled_dates',
+                    [ 'disabled_date' => $block_date, 'disabled_period' => $block_period ],
+                    [ '%s', '%s' ]
+                );
+            }
+        }
     }
-    
-    $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
-    $disabled_dates = $wpdb->get_results("SELECT * FROM $table_name");
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_disabled_slot'])) {
+        $remove_id = intval($_POST['remove_id']);
+        $wpdb->delete(
+            $wpdb->prefix . 'scouting_rentals_disabled_dates',
+            [ 'id' => $remove_id ],
+            [ '%d' ]
+        );
+    }
+
+    // Fetch up-to-date disabled slots
+    $disabled_slots = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}scouting_rentals_disabled_dates");
+
+    echo '<h2>Geblockeerde dagdelen:</h2>';
+    echo '<table><tr><th>Datum</th><th>Dagdeel</th><th>Actie</th></tr>';
+    foreach ($disabled_slots as $slot) {
+        echo '<tr>';
+        echo '<td>' . esc_html($slot->disabled_date) . '</td>';
+        echo '<td>' . esc_html($slot->disabled_period) . '</td>';
+        echo '<td>';
+        echo '<form method="post" style="display:inline">';
+        echo '<input type="hidden" name="remove_disabled_slot" value="1">';
+        echo '<input type="hidden" name="remove_id" value="' . intval($slot->id) . '">';
+        echo '<input type="submit" value="Deblokkeer">';
+        echo '</form>';
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+
+    // Partial-day block form
+    echo '<h2>Blokkeer dagdeel:</h2>';
+    echo '<form method="post">';
+    echo '<label for="block_date">Datum:</label> <input type="text" id="block_datepicker" name="block_date" required> ';
+    echo '<label for="block_period">Dagdeel:</label> <select name="block_period">';
+    echo '<option value="ochtend">Ochtend</option>';
+    echo '<option value="avond">Avond</option>';
+    echo '<option value="both">Hele dag</option>';
+    echo '</select> ';
+    echo '<input type="submit" name="add_disabled_slot" value="Blokkeren">';
+    echo '</form>';
+
     ?>
-    
-    <h2>Geblockeerde verhuur datums:</h2>
-<!-- Form to add disabled date -->
-<form method="post">
-    <label for="disabled_date">Selecteer datum om te blokkeren:</label>
-    <input type="text" id="disable_datepicker" name="disabled_date" required>
-    <input type="submit" name="add_disabled_date" value="Blokkeer datum">
-</form>
-
-<!-- Form to re-enable date -->
-<form method="post">
-    <label for="reenable_date">Selecteer datum om te deblokkeren:</label>
-    <input type="text" id="reenable_datepicker" name="reenable_date" required>
-    <input type="submit" name="remove_disabled_date" value="Deblokkeer datum">
-</form>
-
 <script>
-    var reservedDates = [];
-    var disabledDates = [];
-
-    // Fetch reserved dates from the server
-    fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
-        .then(response => response.json())
-        .then(data => {
-            reservedDates = data;
-            initializeDatepickers();
-        });
-
-    // Fetch disabled dates from the server
-    fetch("<?php echo admin_url('admin-ajax.php?action=get_disabled_dates'); ?>")
-        .then(response => response.json())
-        .then(data => {
-            disabledDates = data;
-            initializeDatepickers();
-        });
-
-    function initializeDatepickers() {
-        // Initialize datepicker for disabling dates
-        $("#disable_datepicker").datepicker({
-            dateFormat: "yy-mm-dd",
-            beforeShowDay: function(date) {
-                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
-                // Exclude already disabled or reserved dates
-                if (reservedDates.indexOf(dateString) !== -1 || disabledDates.indexOf(dateString) !== -1) {
-                    return [false];
+    jQuery(function($) {
+        var reserved = {};
+        var disabledSlots = [];
+        function initBlockPicker() {
+            $("#block_datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                beforeShowDay: function(date) {
+                    var d = $.datepicker.formatDate('yy-mm-dd', date);
+                    // disable if already reserved or already blocked
+                    if (reserved[d] || disabledSlots.indexOf(d) !== -1) {
+                        return [false, '', 'Niet beschikbaar'];
+                    }
+                    return [true, ''];
                 }
-                return [true];
-            }
-        });
-
-        // Initialize datepicker for re-enabling dates
-        $("#reenable_datepicker").datepicker({
-            dateFormat: "yy-mm-dd",
-            beforeShowDay: function(date) {
-                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
-                // Only allow selection of disabled dates
-                if (disabledDates.indexOf(dateString) !== -1) {
-                    return [true];
-                }
-                return [false];
-            }
-        });
-    }
+            });
+        }
+        // fetch reserved dates
+        fetch("<?php echo admin_url('admin-ajax.php?action=get_reserved_dates'); ?>")
+            .then(r => r.json()).then(data => {
+                reserved = data;
+                initBlockPicker();
+            });
+        // fetch disabled slots
+        fetch("<?php echo admin_url('admin-ajax.php?action=get_disabled_dates'); ?>")
+            .then(r => r.json()).then(data => {
+                disabledSlots = data.map(function(slot) { return slot.disabled_date; });
+                initBlockPicker();
+            });
+    });
 </script>
     <?php
     return ob_get_clean();
@@ -386,7 +505,8 @@ add_action('wp_ajax_nopriv_get_disabled_dates', 'get_disabled_dates');
 function get_disabled_dates() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'scouting_rentals_disabled_dates';
-    $results = $wpdb->get_col("SELECT disabled_date FROM $table_name");
+    // Return both date and disabled_period for each slot
+    $results = $wpdb->get_results("SELECT id, disabled_date, disabled_period FROM $table_name", OBJECT);
     wp_send_json($results);
 }
 ?>

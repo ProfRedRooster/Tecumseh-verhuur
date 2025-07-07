@@ -46,13 +46,65 @@ form#scouting-rentals-form input[type="submit"]:hover {
     background-color: #004494;
 }
 
-.reserved-date a {
+.reserved-date a.ui-state-default,
+.reserved-date a.ui-state-default:hover {
     background-color: #ff0000 !important;
-    color: #FF0000 !important;
+    color: #ffffff !important;
 }
 
-.available-date a {
-    background-color: #CCFFCC !important;
+.available-date a.ui-state-default,
+.available-date a.ui-state-default:hover {
+    background-color: #ccffcc !important;
     color: #008000 !important;
-  
+}
+
+.morning-reserved a.ui-state-default,
+.morning-reserved a.ui-state-default:hover {
+    background-color: #FFA500 !important;
+    color: #000000 !important;
+}
+
+.evening-reserved a.ui-state-default,
+.evening-reserved a.ui-state-default:hover {
+    background-color: #800080 !important;
+    color: #FFFFFF !important;
+}
+
+/* Legend styling */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+}
+.legend-color {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 8px;
+    border: 2px solid #666;
+    vertical-align: middle;
+}
+.legend-color.available { background-color: #ccffcc !important; }
+.legend-color.reserved  { background-color: #ff0000 !important; }
+.legend-color.morning   { background-color: #FFA500 !important; }
+.legend-color.evening   { background-color: #800080 !important; }
+
+/* Style disabled period select options with reservation colors */
+select#start_period option[value="ochtend"]:disabled,
+select#end_period option[value="ochtend"]:disabled {
+    background-color: #FFA500 !important;
+    color: #000000 !important;
+    opacity: 1 !important;
+}
+select#start_period option[value="avond"]:disabled,
+select#end_period option[value="avond"]:disabled {
+    background-color: #800080 !important;
+    color: #FFFFFF !important;
+    opacity: 1 !important;
 }

@@ -92,19 +92,22 @@ function is_reservation_available($start_date, $end_date, $start_period, $end_pe
     }
 
     // Existing availability check for overlapping reservations
-    $query = $wpdb->prepare(
-        "SELECT COUNT(*) FROM $table_name 
-        WHERE NOT (end_date < %s OR start_date > %s) 
-        AND (start_period = %s OR end_period = %s OR start_period = %s OR end_period = %s)",
-        $start_date,
-        $end_date,
-        $start_period,
-        $start_period,
-        $end_period,
-        $end_period
-    );
+    // Determine whether request is a half-day or full-day/multi-day booking
+    if ($start_date === $end_date && $start_period === 'ochtend' && $end_period === 'ochtend') {
+        // morning only
+        $period_condition = "start_period = 'ochtend'";
+    } elseif ($start_date === $end_date && $start_period === 'avond' && $end_period === 'avond') {
+        // evening only
+        $period_condition = "end_period = 'avond'";
+    } else {
+        // full day or multi-day - block any overlap
+        $period_condition = "1=1";
+    }
+    $sql = "SELECT COUNT(*) FROM $table_name
+        WHERE NOT (end_date < %s OR start_date > %s)
+        AND ($period_condition)";
+    $query = $wpdb->prepare($sql, $start_date, $end_date);
     $count = $wpdb->get_var($query);
-
     // Return true if no overlapping reservations, false otherwise
     return ($count == 0);
 }

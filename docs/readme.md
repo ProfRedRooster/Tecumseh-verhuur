@@ -9,9 +9,12 @@ Huidige functies:
 - Een reserveringscontrolepaneel om alle gegevens eenvoudig aan te passen.
 - Een prijscontrolepaneel om prijzen te beheren.
 - Automatische generatie van verhuurovereenkomsten en facturen met ingevulde gegevens via dompdf.
-  
+- Dagdelenpicker: reeds gereserveerde ochtend/avond-dagdelen worden uitgeschakeld en selectie wordt automatisch aangepast.
+- Multi-day boekingen beperken tot de beschikbaarheid vóór of tijdens de beschikbare dagdeel beschikbaar tussen reserveringen.
+- Kleurgecodeerde legenda toegevoegd aan datepickers (groen: beschikbaar, rood: vol, oranje: ochtend gereserveerd, paars: avond gereserveerd).
+- Stam-interface: blokkeer en deblokkeer individuele dagdelen (ochtend, avond of hele dag) zonder dubbele of reeds gereserveerde blokken.
+
 Functies waar ik aan werk:
-- Het verbeteren van de datumkiezer met beschikbaarheid in de ochtend/avond.
 - Het verzenden van e-mails bij nieuwe reserveringen.
 - Het vertalen van code en functies naar het Nederlands.
 - Het toevoegen van extra details aan aankomende reserveringen.
