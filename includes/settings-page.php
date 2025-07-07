@@ -37,6 +37,7 @@ function scouting_rentals_settings_init() {
     register_setting('scouting_rentals_settings_group', 'email');
     register_setting('scouting_rentals_settings_group', 'logo');
     register_setting('scouting_rentals_settings_group', 'handtekening');
+    register_setting('scouting_rentals_settings_group', 'datumkanniet');
 }
 
 // Create settings page
@@ -116,7 +117,11 @@ function scouting_rentals_settings_page() {
                 <tr valign="top">
                     <th scope="row">Handtekening link</th>
                     <td><input type="text" name="handtekening" value="<?php echo esc_attr(get_option('handtekening', '')); ?>" /></td>
-                </tr>                
+                </tr> 
+                <tr valign="top">
+                    <th scope="row">datum kan niet link</th>
+                    <td><input type="text" name="datumkanniet" value="<?php echo esc_attr(get_option('datumkanniet', '')); ?>" /></td>
+                </tr>                 
             </table>
             
             <?php submit_button(); ?>

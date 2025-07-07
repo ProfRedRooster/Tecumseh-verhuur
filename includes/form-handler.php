@@ -167,7 +167,7 @@ function handle_scouting_rentals_submission() {
             exit;
         } else {
             // Inform the user that the requested dates are not available
-            wp_redirect(home_url('/Datumkanniet'));
+            wp_redirect(home_url(esc_attr(get_option('datumkanniet', ''))));
         }
     }
 }
